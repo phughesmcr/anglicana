@@ -1,0 +1,19 @@
+{
+  "name": "@phughesmcr/anglicana",
+  "version": "0.1.0",
+  "exports": "./mod.js",
+  "test": {
+    "include": [
+      "test/**/*.ts"
+    ]
+  },
+  "fmt": {
+    "lineWidth": 120
+  },
+  "unstable": [
+    "temporal"
+  ],
+  "include": [
+    "mod.js"
+  ]
+}
