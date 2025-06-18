@@ -1,11 +1,11 @@
 /**
- * @module
  * @description Various functions to get Church of England calendar dates and times using the Temporal API.
  * @author P. Hughes <github@phugh.es> (www.phugh.es)
  * @version "2024-02-07"
  * @license MIT
  * @see {@link https://www.churchofengland.org/prayer-and-worship/worship-texts-and-resources/common-worship/churchs-year/rules}
  * @requires Temporal @see {@link https://github.com/tc39/proposal-temporal/blob/main/README.md#polyfills}
+ * @module
  */
 
 import { commonWorshipFixedCalendar } from "./common_worship/fixed_calendar.ts";
@@ -113,10 +113,10 @@ export interface EastertideAdditionalDays {
 
 /**
  * Validate a year input
- * @param year YYYY
- * @returns the validated year
- * @throws RangeError if the year is invalid
- * @throws TypeError if the year is not a number
+ * @param year YYYY between 1583 and 9999
+ * @returns the year if valid
+ * @throws {RangeError} if the year is invalid
+ * @throws {TypeError} if the year is not a number
  */
 export function validateYear(year: number): number {
   if (typeof year !== "number") {
@@ -124,10 +124,6 @@ export function validateYear(year: number): number {
   }
   if (!Number.isInteger(year)) {
     throw new RangeError("Invalid date: Year must be an integer");
-  }
-  // Temporal.PlainDate only supports years between -271820 and 275759
-  if (year < -271820 || year > 275759) {
-    throw new RangeError("Invalid date: Year is out of Temporal API range");
   }
   // To avoid weirdness with the Julian calendar
   if (year < 1583 || year > 9999) {
@@ -137,55 +133,60 @@ export function validateYear(year: number): number {
 }
 
 /**
- * Validate a date input
- * @param date YYYY-MM-DD or YYYY
- * @returns the validated date
- * @throws RangeError if the date is invalid
+ * Validate and normalize date input to a Temporal.PlainDate
+ * @param date YYYY-MM-DD, YYYY, PlainDate, or PlainDateLike
+ * @returns a validated Temporal.PlainDate
+ * @throws {RangeError} if the date is invalid
+ * @throws {TypeError} if the input type is invalid
  */
-export function validateDate<T extends string | number | Temporal.PlainDate | Temporal.PlainDateLike>(date: T): T {
+export function validateDate(date: string | number | Temporal.PlainDate | Temporal.PlainDateLike): Temporal.PlainDate {
+  if (date instanceof Temporal.PlainDate) {
+    return date;
+  }
+  
+  if (typeof date === "number") {
+    const year = validateYear(date);
+    return new Temporal.PlainDate(year, 1, 1);
+  }
+  
   if (typeof date === "string") {
     try {
-      Temporal.PlainDate.from(date);
-    } catch (_err) {
-      throw new RangeError(`Invalid date string: ${date}`);
+      return Temporal.PlainDate.from(date, { overflow: "reject" });
+    } catch (err) {
+      if (err instanceof RangeError || err instanceof TypeError) {
+        throw new RangeError(`Invalid date: ${date}`);
+      }
+      throw err;
     }
-  } else if (typeof date === "number") {
-    validateYear(date);
-  } else if (date instanceof Temporal.PlainDate) {
-    return date;
-  } else if (typeof date === "object" && date !== null) {
-    const { year, month, day } = date;
-    if (year === undefined || month === undefined || day === undefined) {
-      throw new RangeError("Invalid date: PlainDateLike object: year, month, and day are required");
-    }
-    validateYear(year);
-    if (month < 1 || month > 12) {
-      throw new RangeError(`Invalid date: month ${month} is not between 1 and 12`);
-    }
-    if (day < 1 || day > 31) {
-      throw new RangeError(`Invalid date: day ${day} is not between 1 and 31`);
-    }
-    if (month === 2 && day > 29) {
-      throw new RangeError(`Invalid date: February ${day} is not between 1 and 29`);
-    }
-    if ((month === 4 || month === 6 || month === 9 || month === 11) && day > 30) {
-      throw new RangeError(`Invalid date: ${month} has 30 days`);
-    }
-    if (
-      (month === 1 || month === 3 || month === 5 || month === 7 || month === 8 || month === 10 || month === 12) &&
-      day > 31
-    ) {
-      throw new RangeError(`Invalid date: ${month} has 31 days`);
-    }
-    try {
-      Temporal.PlainDate.from(date);
-    } catch (_err) {
-      throw new RangeError(`Invalid date: ${JSON.stringify(date)}`);
-    }
-  } else {
-    throw new RangeError("Invalid date: input type invalid");
   }
-  return date;
+  
+  if (typeof date === "object" && date !== null && !Array.isArray(date)) {
+    // Check if object has the required properties for a PlainDateLike
+    const hasYear = 'year' in date;
+    const hasMonth = 'month' in date;
+    const hasDay = 'day' in date;
+    
+    // If it's not a proper PlainDateLike object, throw TypeError
+    if (!hasYear || !hasMonth || !hasDay) {
+      throw new TypeError("Invalid date: input must be a string, number, Temporal.PlainDate, or PlainDateLike object");
+    }
+    
+    // Validate year if present in the object
+    if (hasYear && typeof date.year === 'number') {
+      validateYear(date.year);
+    }
+    
+    try {
+      return Temporal.PlainDate.from(date, { overflow: "reject" });
+    } catch (err) {
+      if (err instanceof RangeError || err instanceof TypeError) {
+        throw new RangeError(`Invalid date: ${JSON.stringify(date)}`);
+      }
+      throw err;
+    }
+  }
+  
+  throw new TypeError("Invalid date: input must be a string, number, Temporal.PlainDate, or PlainDateLike object");
 }
 
 //#endregion Utils
@@ -215,10 +216,7 @@ export function getFirstSundayOfAdvent(calendarYear: number): Temporal.PlainDate
  * @returns the church year as a number in the format YYYY
  */
 export function getChurchYear(date: string | number | Temporal.PlainDate | Temporal.PlainDateLike): number {
-  if (typeof date === "number") {
-    date = new Temporal.PlainDate(validateYear(date), 1, 1);
-  }
-  const plainDate = Temporal.PlainDate.from(validateDate(date));
+  const plainDate = validateDate(date);
   const adventSunday = getFirstSundayOfAdvent(plainDate.year);
   if (Temporal.PlainDate.compare(plainDate, adventSunday) >= 0) {
     // If date is on or after Advent Sunday, church year is year + 1
@@ -238,7 +236,7 @@ export function getChurchYear(date: string | number | Temporal.PlainDate | Tempo
  * @returns `true` if the date is a Sunday, `false` otherwise
  */
 export function isSunday(date: string | Temporal.PlainDate | Temporal.PlainDateLike): boolean {
-  return Temporal.PlainDate.from(validateDate(date)).dayOfWeek === 7;
+  return validateDate(date).dayOfWeek === 7;
 }
 
 /**
@@ -247,7 +245,7 @@ export function isSunday(date: string | Temporal.PlainDate | Temporal.PlainDateL
  * @returns the date of the next Sunday
  */
 export function getNextSunday(date: string | Temporal.PlainDate | Temporal.PlainDateLike): Temporal.PlainDate {
-  const today = Temporal.PlainDate.from(validateDate(date));
+  const today = validateDate(date);
   if (today.dayOfWeek === 7) return today.add({ weeks: 1 });
   return today.add({ days: 7 - today.dayOfWeek });
 }
@@ -258,7 +256,7 @@ export function getNextSunday(date: string | Temporal.PlainDate | Temporal.Plain
  * @returns the date of the previous Sunday
  */
 export function getPreviousSunday(date: string | Temporal.PlainDate | Temporal.PlainDateLike): Temporal.PlainDate {
-  const today = Temporal.PlainDate.from(validateDate(date));
+  const today = validateDate(date);
   if (today.dayOfWeek === 7) return today.subtract({ weeks: 1 });
   return today.subtract({ days: today.dayOfWeek });
 }
@@ -273,7 +271,7 @@ export function getPreviousSunday(date: string | Temporal.PlainDate | Temporal.P
  * @TODO Are "days" the correct unit for this?
  */
 export function getClosestSunday(date: string | Temporal.PlainDate | Temporal.PlainDateLike): Temporal.PlainDate {
-  const today = Temporal.PlainDate.from(validateDate(date));
+  const today = validateDate(date);
   if (today.dayOfWeek === 7) return today;
   const nextSunday = today.add({ days: (7 - today.dayOfWeek) % 7 });
   const prevSunday = today.subtract({ days: today.dayOfWeek });
@@ -315,7 +313,7 @@ export function getSundaysOfChurchYear(
 export function getWeekdayLectionaryNumber(
   date: string | Temporal.PlainDate | Temporal.PlainDateLike,
 ): 1 | 2 {
-  const plainDate = Temporal.PlainDate.from(validateDate(date));
+  const plainDate = validateDate(date);
   const churchYear = getChurchYear(plainDate);
   return ((churchYear + 1) % 2) + 1 as 1 | 2;
 }
@@ -523,7 +521,7 @@ export function getTrinitySunday(year: number, easterOptions: EasterOptions = {}
 
 /**
  * Calculate the date of All Saints' Day for a given church year
- * @note All Saints’ Day is celebrated on either 1 November or the Sunday falling between
+ * @note All Saints' Day is celebrated on either 1 November or the Sunday falling between
  *       30 October and 5 November; if the latter there may be a secondary celebration
  *       on 1 November
  * @param year YYYY
