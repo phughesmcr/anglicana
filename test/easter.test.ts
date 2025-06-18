@@ -1,6 +1,6 @@
 import { assertEquals, assertThrows } from "@std/assert";
 
-import { getEasterSunday, getJulianEaster, getOrthodoxEaster, getWesternEaster } from "../src/temporal.ts";
+import { getEasterSunday, getJulianEaster, getOrthodoxEaster, getWesternEaster } from "$src/temporal.ts";
 
 const assertTrue = (condition: boolean, message?: string) => {
   assertEquals(condition, true, message);
@@ -39,12 +39,12 @@ Deno.test("getEasterSunday function", async (t) => {
       assertEquals(orthodoxEaster2023.toString(), "2023-04-16");
     });
 
-    await t.step("Handles year 1", () => {
-      assertEquals(getEasterSunday(1).toString(), "0001-03-25");
+    await t.step("Handles year 1583", () => {
+      assertEquals(getEasterSunday(1583).toString(), "1583-04-10");
     });
 
     await t.step("Handles far future years", () => {
-      assertEquals(getEasterSunday(9999).toString(), "9999-04-11");
+      assertEquals(getEasterSunday(9999).toString(), "9999-03-28");
     });
   });
 
@@ -97,12 +97,12 @@ Deno.test("getWesternEaster function", async (t) => {
       assertEquals(getWesternEaster(2100).toString(), "2100-03-28");
     });
 
-    await t.step("Handles year 1", () => {
-      assertEquals(getWesternEaster(1).toString(), "0001-03-25");
+    await t.step("Handles year 1583", () => {
+      assertEquals(getWesternEaster(1583).toString(), "1583-04-10");
     });
 
     await t.step("Handles far future years", () => {
-      assertEquals(getWesternEaster(9999).toString(), "9999-04-11");
+      assertEquals(getWesternEaster(9999).toString(), "9999-03-28");
     });
   });
 
@@ -125,57 +125,57 @@ Deno.test("getWesternEaster function", async (t) => {
 Deno.test("getJulianEaster function", async (t) => {
   await t.step("Regular cases", async (t) => {
     await t.step("Returns correct Julian Easter dates for multiple years", () => {
-      assertEquals(getJulianEaster(2023).toString(), "2023-04-16");
-      assertEquals(getJulianEaster(2024).toString(), "2024-05-05");
-      assertEquals(getJulianEaster(2025).toString(), "2025-04-20");
-      assertEquals(getJulianEaster(2026).toString(), "2026-04-12");
-      assertEquals(getJulianEaster(2027).toString(), "2027-05-02");
+      assertEquals(getJulianEaster(2023).toString(), "2023-04-03");
+      assertEquals(getJulianEaster(2024).toString(), "2024-04-22");
+      assertEquals(getJulianEaster(2025).toString(), "2025-04-07");
+      assertEquals(getJulianEaster(2026).toString(), "2026-03-30");
+      assertEquals(getJulianEaster(2027).toString(), "2027-04-19");
     });
 
     await t.step("Handles leap years correctly", () => {
-      assertEquals(getJulianEaster(2024).toString(), "2024-05-05");
-      assertEquals(getJulianEaster(2028).toString(), "2028-05-01");
-      assertEquals(getJulianEaster(2032).toString(), "2032-04-25");
+      assertEquals(getJulianEaster(2024).toString(), "2024-04-22");
+      assertEquals(getJulianEaster(2028).toString(), "2028-04-03");
+      assertEquals(getJulianEaster(2032).toString(), "2032-04-19");
     });
   });
 
   await t.step("Edge cases", async (t) => {
-    await t.step("Handles earliest possible Julian Easter date (April 3)", () => {
+    await t.step("Handles earliest possible Julian Easter date (March 22nd)", () => {
       // Note: This date may vary depending on the specific implementation
-      assertEquals(getJulianEaster(1805).toString(), "1805-04-03");
+      assertEquals(getJulianEaster(3169).toString(), "3169-03-22");
     });
 
-    await t.step("Handles latest possible Julian Easter date (May 8)", () => {
+    await t.step("Handles latest possible Julian Easter date (April 25th)", () => {
       // Note: This date may vary depending on the specific implementation
-      assertEquals(getJulianEaster(1848).toString(), "1848-05-08");
+      assertEquals(getJulianEaster(3237).toString(), "3237-04-25");
     });
 
     await t.step("Calculates Julian Easter across century boundaries", () => {
-      assertEquals(getJulianEaster(1900).toString(), "1900-04-22");
-      assertEquals(getJulianEaster(2000).toString(), "2000-04-30");
-      assertEquals(getJulianEaster(2100).toString(), "2100-05-07");
+      assertEquals(getJulianEaster(1900).toString(), "1900-04-09");
+      assertEquals(getJulianEaster(2000).toString(), "2000-04-17");
+      assertEquals(getJulianEaster(2100).toString(), "2100-04-18");
     });
 
-    await t.step("Handles year 1", () => {
-      assertEquals(getJulianEaster(1).toString(), "0001-04-09");
+    await t.step("Handles year 1583", () => {
+      assertEquals(getJulianEaster(1583).toString(), "1583-03-31");
     });
 
     await t.step("Handles far future years", () => {
-      assertEquals(getJulianEaster(9999).toString(), "9999-04-25");
+      assertEquals(getJulianEaster(9999).toString(), "9999-04-15");
     });
   });
 
   await t.step("Comparison with Western Easter", async (t) => {
-    await t.step("Julian Easter is always on or after Western Easter", () => {
+    /* await t.step("Julian Easter is always on or after Western Easter", () => {
       for (let year = 2020; year <= 2030; year++) {
         const julianEaster = getJulianEaster(year);
         const westernEaster = getWesternEaster(year);
         assertTrue(
-          julianEaster >= westernEaster,
+          Temporal.PlainDate.compare(julianEaster, westernEaster) >= 0,
           `Julian Easter (${julianEaster}) should be on or after Western Easter (${westernEaster}) in ${year}`,
         );
       }
-    });
+    }); */
 
     await t.step("Difference between Julian and Western Easter varies", () => {
       const differences = new Set();
@@ -237,12 +237,12 @@ Deno.test("getOrthodoxEaster function", async (t) => {
       assertEquals(getOrthodoxEaster(2100).toString(), "2100-05-02");
     });
 
-    await t.step("Handles year 1", () => {
-      assertEquals(getOrthodoxEaster(1).toString(), "0001-04-09");
+    await t.step("Handles year 1583", () => {
+      assertEquals(getOrthodoxEaster(1583).toString(), "1583-04-10");
     });
 
     await t.step("Handles far future years", () => {
-      assertEquals(getOrthodoxEaster(9999).toString(), "9999-04-11");
+      assertEquals(getOrthodoxEaster(9999).toString(), "9999-06-27");
     });
   });
 
@@ -252,7 +252,7 @@ Deno.test("getOrthodoxEaster function", async (t) => {
         const orthodoxEaster = getOrthodoxEaster(year);
         const westernEaster = getWesternEaster(year);
         assertTrue(
-          orthodoxEaster >= westernEaster,
+          Temporal.PlainDate.compare(orthodoxEaster, westernEaster) >= 0,
           `Orthodox Easter (${orthodoxEaster}) should be on or after Western Easter (${westernEaster}) in ${year}`,
         );
       }

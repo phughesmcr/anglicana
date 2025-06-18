@@ -1,6 +1,13 @@
 import { assertEquals, assertThrows } from "@std/assert";
 
-import { getClosestSunday, getNextSunday, getPreviousSunday, isSunday } from "../src/temporal.ts";
+import {
+  getClosestSunday,
+  getFirstSundayOfAdvent,
+  getNextSunday,
+  getPreviousSunday,
+  getSundaysOfChurchYear,
+  isSunday,
+} from "$src/temporal.ts";
 
 Deno.test("isSunday function", async (t) => {
   await t.step("returns true for a known Sunday", () => {
@@ -36,11 +43,11 @@ Deno.test("isSunday function", async (t) => {
     assertThrows(() => isSunday(""));
   });
 
-  /* await t.step("throws error for invalid date object", () => {
+  await t.step("throws error for invalid date object", () => {
     assertThrows(() => isSunday("2023-13-01"));
     assertThrows(() => isSunday(new Temporal.PlainDate(2023, 13, 1)));
     assertThrows(() => isSunday({ year: 2023, month: 13, day: 1 }));
-  }); */
+  });
 });
 
 Deno.test("getNextSunday function", async (t) => {
@@ -83,11 +90,11 @@ Deno.test("getNextSunday function", async (t) => {
     assertThrows(() => getNextSunday(""), RangeError);
   });
 
-  /* await t.step("throws error for invalid date object", () => {
+  await t.step("throws error for invalid date object", () => {
     assertThrows(() => getNextSunday("2023-13-01"), RangeError);
     assertThrows(() => getNextSunday(new Temporal.PlainDate(2023, 13, 1)), RangeError);
     assertThrows(() => getNextSunday({ year: 2023, month: 13, day: 1 }), RangeError);
-  }); */
+  });
 });
 
 Deno.test("getPreviousSunday function", async (t) => {
@@ -140,11 +147,11 @@ Deno.test("getPreviousSunday function", async (t) => {
     assertThrows(() => getPreviousSunday(""), RangeError);
   });
 
-  /* await t.step("throws error for invalid date object", () => {
+  await t.step("throws error for invalid date object", () => {
     assertThrows(() => getPreviousSunday("2023-13-01"), RangeError);
     assertThrows(() => getPreviousSunday(new Temporal.PlainDate(2023, 13, 1)), RangeError);
     assertThrows(() => getPreviousSunday({ year: 2023, month: 13, day: 1 }), RangeError);
-  }); */
+  });
 });
 
 Deno.test("getClosestSunday function", async (t) => {
@@ -211,19 +218,17 @@ Deno.test("getClosestSunday function", async (t) => {
     assertThrows(() => getClosestSunday(""), RangeError);
   });
 
-  /* await t.step("throws error for invalid date object", () => {
+  await t.step("throws error for invalid date object", () => {
     assertThrows(() => getClosestSunday("2023-13-01"), RangeError);
     assertThrows(() => getClosestSunday(new Temporal.PlainDate(2023, 13, 1)), RangeError);
     assertThrows(() => getClosestSunday({ year: 2023, month: 13, day: 1 }), RangeError);
-  }); */
+  });
 });
-
-import { getFirstSundayOfAdvent, getSundaysOfChurchYear } from "../src/temporal.ts";
 
 Deno.test("getSundaysOfChurchYear function", async (t) => {
   await t.step("returns the correct number of Sundays for a church year", () => {
     const sundays2023 = getSundaysOfChurchYear(2023);
-    assertEquals(sundays2023.length, 52);
+    assertEquals(sundays2023.length, 53);
   });
 
   await t.step("first Sunday is the First Sunday of Advent of the previous calendar year", () => {
@@ -254,22 +259,22 @@ Deno.test("getSundaysOfChurchYear function", async (t) => {
   });
 
   await t.step("handles earliest possible First Sunday of Advent", () => {
-    // 2026 has the earliest possible First Sunday of Advent (November 29)
-    const sundays2026 = getSundaysOfChurchYear(2026);
-    assertEquals(sundays2026[0].toString(), "2025-11-30");
-    assertEquals(sundays2026[sundays2026.length - 1].toString(), "2026-11-22");
-  });
-
-  await t.step("handles latest possible First Sunday of Advent", () => {
-    // 2023 has the latest possible First Sunday of Advent (December 3)
+    // 2022 has the earliest possible First Sunday of Advent (November 27)
     const sundays2023 = getSundaysOfChurchYear(2023);
     assertEquals(sundays2023[0].toString(), "2022-11-27");
     assertEquals(sundays2023[sundays2023.length - 1].toString(), "2023-11-26");
   });
 
+  await t.step("handles latest possible First Sunday of Advent", () => {
+    // 2024 has the latest possible First Sunday of Advent (December 3)
+    const sundays2023 = getSundaysOfChurchYear(2024);
+    assertEquals(sundays2023[0].toString(), "2023-12-03");
+    assertEquals(sundays2023[sundays2023.length - 1].toString(), "2024-11-24");
+  });
+
   await t.step("works with date string input", () => {
     const sundays = getSundaysOfChurchYear("2023-06-15");
-    assertEquals(sundays.length, 52);
+    assertEquals(sundays.length, 53);
     assertEquals(sundays[0].toString(), "2022-11-27");
     assertEquals(sundays[sundays.length - 1].toString(), "2023-11-26");
   });

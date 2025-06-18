@@ -22,7 +22,7 @@ await esbuild.build({
   plugins: [...denoPlugins()],
   entryPoints: ["mod.ts"],
   outfile: "./dist/anglicana.es6.min.js",
-  target: ["es6", "chrome98"],
+  target: ["es6"],
   bundle: true,
   format: "esm",
   minify: true,

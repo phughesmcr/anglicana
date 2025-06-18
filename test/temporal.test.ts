@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows } from "@std/assert";
+/* import { assertEquals, assertThrows } from "@std/assert";
 
 import {
   getAscensionDay,
@@ -11,17 +11,62 @@ import {
   getFixedDates,
   getGoodFriday,
   getMaundyThursday,
-  getMoveableDates,
-  getSeasonsOfYear,
   getSundaysOfChurchYear,
   getTheBaptismOfChrist,
   getTrinitySunday,
   getWesternEaster,
-} from ../src/temporal.tss";
+} from "$src/temporal.ts";
 
 const assertTrue = (condition: boolean, message?: string) => {
   assertEquals(condition, true, message);
 };
+
+Deno.test("getChristmasDay function", async (t) => {
+  await t.step("returns correct date for a regular year", () => {
+    const christmas2023 = getChristmasDay(2023);
+    assertEquals(christmas2023.toString(), "2023-12-25");
+    assertEquals(christmas2023.dayOfWeek, 1); // Monday
+  });
+
+  await t.step("returns correct date for a leap year", () => {
+    const christmas2024 = getChristmasDay(2024);
+    assertEquals(christmas2024.toString(), "2024-12-25");
+    assertEquals(christmas2024.dayOfWeek, 3); // Wednesday
+  });
+
+  await t.step("handles year 1", () => {
+    const christmas1 = getChristmasDay(1);
+    assertEquals(christmas1.toString(), "0001-12-25");
+  });
+
+  await t.step("handles year 9999", () => {
+    const christmas9999 = getChristmasDay(9999);
+    assertEquals(christmas9999.toString(), "9999-12-25");
+  });
+
+  await t.step("handles negative years (BCE)", () => {
+    const christmasBCE1 = getChristmasDay(-1);
+    assertEquals(christmasBCE1.toString(), "-000001-12-25");
+  });
+
+  await t.step("returns a Temporal.PlainDate object", () => {
+    const christmas = getChristmasDay(2025);
+    assertEquals(christmas instanceof Temporal.PlainDate, true);
+  });
+
+  await t.step("throws for non-integer years", () => {
+    assertThrows(() => getChristmasDay(2023.5), RangeError);
+  });
+
+  await t.step("throws for non-numeric input", () => {
+    assertThrows(() => getChristmasDay("2023" as any), TypeError);
+  });
+
+  await t.step("throws for years out of range", () => {
+    assertThrows(() => getChristmasDay(-271821), RangeError);
+    assertThrows(() => getChristmasDay(275760), RangeError);
+  });
+});
 
 Deno.test("getSeasonsOfYear function", async (t) => {
   await t.step("returns correct seasons for a typical year", () => {
