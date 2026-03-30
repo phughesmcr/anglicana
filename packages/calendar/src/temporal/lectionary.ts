@@ -3,6 +3,7 @@
  * @module
  */
 
+import { SUNDAY_LECTIONARY_LETTERS } from "../constants.ts";
 import type { DateInput, SundayLectionaryLetter, WeekdayLectionaryNumber } from "../types.ts";
 import { getChurchYear } from "./advent.ts";
 
@@ -13,8 +14,7 @@ import { getChurchYear } from "./advent.ts";
  * @see {@link https://www.churchofengland.org/prayer-and-worship/worship-texts-and-resources/common-worship/churchs-year/lectionary}
  */
 export function getWeekdayLectionaryNumber(date: DateInput): WeekdayLectionaryNumber {
-  const churchYear = getChurchYear(date);
-  return ((churchYear + 1) % 2) + 1 as WeekdayLectionaryNumber;
+  return ((getChurchYear(date) + 1) % 2) + 1 as WeekdayLectionaryNumber;
 }
 
 /**
@@ -24,6 +24,5 @@ export function getWeekdayLectionaryNumber(date: DateInput): WeekdayLectionaryNu
  * @see {@link https://www.churchofengland.org/prayer-and-worship/worship-texts-and-resources/common-worship/churchs-year/lectionary}
  */
 export function getSundayLectionaryLetter(date: DateInput): SundayLectionaryLetter {
-  const year = getChurchYear(date) % 3;
-  return ["C", "A", "B"][year] as SundayLectionaryLetter;
+  return SUNDAY_LECTIONARY_LETTERS[getChurchYear(date) % 3] as SundayLectionaryLetter;
 }

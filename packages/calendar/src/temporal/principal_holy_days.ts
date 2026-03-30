@@ -3,6 +3,11 @@
  * @module
  */
 
+import {
+  DAYS_BEFORE_EASTER_ASH_WEDNESDAY,
+  DAYS_BEFORE_EASTER_GOOD_FRIDAY,
+  DAYS_BEFORE_EASTER_MAUNDY_THURSDAY,
+} from "../constants.ts";
 import type { DateInput, EasterOptions } from "../types.ts";
 import { getEasterSunday } from "./easter.ts";
 
@@ -14,7 +19,7 @@ import { getEasterSunday } from "./easter.ts";
  * @returns the western date of Ash Wednesday
  */
 export function getAshWednesday(date: DateInput, easterOptions: EasterOptions = {}): Temporal.PlainDate {
-  return getEasterSunday(date, easterOptions).subtract({ days: 46 });
+  return getEasterSunday(date, easterOptions).subtract({ days: DAYS_BEFORE_EASTER_ASH_WEDNESDAY });
 }
 
 /**
@@ -25,7 +30,7 @@ export function getAshWednesday(date: DateInput, easterOptions: EasterOptions = 
  * @returns the western date of Maundy Thursday
  */
 export function getMaundyThursday(date: DateInput, easterOptions: EasterOptions = {}): Temporal.PlainDate {
-  return getEasterSunday(date, easterOptions).subtract({ days: 3 });
+  return getEasterSunday(date, easterOptions).subtract({ days: DAYS_BEFORE_EASTER_MAUNDY_THURSDAY });
 }
 
 /**
@@ -36,5 +41,5 @@ export function getMaundyThursday(date: DateInput, easterOptions: EasterOptions 
  * @returns the western date of Good Friday
  */
 export function getGoodFriday(date: DateInput, easterOptions: EasterOptions = {}): Temporal.PlainDate {
-  return getEasterSunday(date, easterOptions).subtract({ days: 2 });
+  return getEasterSunday(date, easterOptions).subtract({ days: DAYS_BEFORE_EASTER_GOOD_FRIDAY });
 }

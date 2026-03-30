@@ -6,6 +6,7 @@
  */
 
 import { getEasterSunday, getPalmSunday } from "../temporal/easter.ts";
+import { isPlainDateInInclusiveRange } from "../temporal/date_utils.ts";
 import { validateYear } from "../temporal/validation.ts";
 import { getLiturgicalYearBounds } from "./bounds.ts";
 import { generateFixedEvents } from "./fixed_events.ts";
@@ -54,9 +55,6 @@ function applyBcpGeorgeMarkHarmonisation(
 ): CalendarEvent[] {
   if (!enabled) return events;
 
-  const isBetweenInclusive = (date: Temporal.PlainDate, start: Temporal.PlainDate, end: Temporal.PlainDate) =>
-    Temporal.PlainDate.compare(date, start) >= 0 && Temporal.PlainDate.compare(date, end) <= 0;
-
   return events.map((event) => {
     if (event.eventType !== "fixed" || event.id !== FIXED_MARK_EVANGELIST) {
       return event;
@@ -67,8 +65,8 @@ function applyBcpGeorgeMarkHarmonisation(
     const secondSundayOfEaster = getEasterSunday(y, easterOptions).add({ weeks: 1 });
     const origGeorge = new Temporal.PlainDate(y, 4, 23);
     if (
-      !isBetweenInclusive(orig, palmSunday, secondSundayOfEaster) ||
-      !isBetweenInclusive(origGeorge, palmSunday, secondSundayOfEaster)
+      !isPlainDateInInclusiveRange(orig, palmSunday, secondSundayOfEaster) ||
+      !isPlainDateInInclusiveRange(origGeorge, palmSunday, secondSundayOfEaster)
     ) {
       return event;
     }

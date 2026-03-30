@@ -44,6 +44,8 @@ export interface CalendarEvent {
   offsetDays?: number;
   /** Local celebration classification */
   localType?: "patronal" | "dedication" | "harvest";
+  /** Whether this observance is optional rather than universally required. */
+  optional?: boolean;
   /** Principal vs optional secondary observance of the same feast (e.g. All Saints on 1 November when also kept on Sunday) */
   observance?: "principal" | "secondary";
   /**

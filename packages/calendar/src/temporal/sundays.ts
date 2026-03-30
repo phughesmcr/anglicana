@@ -3,6 +3,7 @@
  * @module
  */
 
+import { TEMPORAL_ISO_SUNDAY } from "../constants.ts";
 import type { DateInput } from "../types.ts";
 import { getLiturgicalYearRange } from "./advent.ts";
 import { validateDate } from "./validation.ts";
@@ -13,7 +14,7 @@ import { validateDate } from "./validation.ts";
  * @returns `true` if the date is a Sunday, `false` otherwise
  */
 export function isSunday(date: DateInput): boolean {
-  return validateDate(date).dayOfWeek === 7;
+  return validateDate(date).dayOfWeek === TEMPORAL_ISO_SUNDAY;
 }
 
 /**
@@ -23,7 +24,7 @@ export function isSunday(date: DateInput): boolean {
  */
 export function getNextSunday(date: DateInput): Temporal.PlainDate {
   const today = validateDate(date);
-  if (today.dayOfWeek === 7) return today.add({ weeks: 1 });
+  if (today.dayOfWeek === TEMPORAL_ISO_SUNDAY) return today.add({ weeks: 1 });
   return today.add({ days: 7 - today.dayOfWeek });
 }
 
@@ -34,7 +35,7 @@ export function getNextSunday(date: DateInput): Temporal.PlainDate {
  */
 export function getPreviousSunday(date: DateInput): Temporal.PlainDate {
   const today = validateDate(date);
-  if (today.dayOfWeek === 7) return today.subtract({ weeks: 1 });
+  if (today.dayOfWeek === TEMPORAL_ISO_SUNDAY) return today.subtract({ weeks: 1 });
   return today.subtract({ days: today.dayOfWeek });
 }
 
@@ -47,7 +48,7 @@ export function getPreviousSunday(date: DateInput): Temporal.PlainDate {
  */
 export function getClosestSunday(date: DateInput): Temporal.PlainDate {
   const today = validateDate(date);
-  if (today.dayOfWeek === 7) return today;
+  if (today.dayOfWeek === TEMPORAL_ISO_SUNDAY) return today;
   const nextSunday = today.add({ days: (7 - today.dayOfWeek) % 7 });
   const prevSunday = today.subtract({ days: today.dayOfWeek });
   const nextDiff = today.until(nextSunday, { largestUnit: "days" });

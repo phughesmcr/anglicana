@@ -3,19 +3,11 @@
  * @module
  */
 
+import { DAYS_AFTER_EASTER_ASCENSION, DAYS_AFTER_EASTER_PENTECOST, TEMPORAL_ISO_SUNDAY } from "../constants.ts";
 import type { DateInput, EasterOptions } from "../types.ts";
+import { findFirstSundayInRange } from "./date_utils.ts";
 import { getEasterSunday, getPalmSunday } from "./easter.ts";
 import { getCalendarYear } from "./validation.ts";
-
-/** Returns the first Sunday in [start, end] (inclusive), or null if none exists. */
-function findFirstSundayInRange(start: Temporal.PlainDate, end: Temporal.PlainDate): Temporal.PlainDate | null {
-  let d = start;
-  while (Temporal.PlainDate.compare(d, end) <= 0) {
-    if (d.dayOfWeek === 7) return d;
-    d = d.add({ days: 1 });
-  }
-  return null;
-}
 
 /**
  * Get Christmas Day for a liturgical year
@@ -35,7 +27,7 @@ export function getChristmasDay(date: DateInput): Temporal.PlainDate {
 export function getEpiphany(date: DateInput, transferToSunday = false): Temporal.PlainDate {
   const calendarYear = getCalendarYear(date);
   const epiphany = Temporal.PlainDate.from({ year: calendarYear, month: 1, day: 6 });
-  if (transferToSunday && epiphany.dayOfWeek !== 7) {
+  if (transferToSunday && epiphany.dayOfWeek !== TEMPORAL_ISO_SUNDAY) {
     const sunday = findFirstSundayInRange(
       new Temporal.PlainDate(calendarYear, 1, 2),
       new Temporal.PlainDate(calendarYear, 1, 8),
@@ -91,7 +83,7 @@ export function getAnnunciation(date: DateInput, easterOptions: EasterOptions = 
   }
 
   // Check if Annunciation falls on a Sunday
-  if (annunciation.dayOfWeek === 7) {
+  if (annunciation.dayOfWeek === TEMPORAL_ISO_SUNDAY) {
     // Transfer to the following Monday
     return annunciation.add({ days: 1 });
   }
@@ -108,7 +100,7 @@ export function getAnnunciation(date: DateInput, easterOptions: EasterOptions = 
  * @returns the western date of the Ascension
  */
 export function getAscensionDay(date: DateInput, easterOptions: EasterOptions = {}): Temporal.PlainDate {
-  return getEasterSunday(date, easterOptions).add({ days: 39 });
+  return getEasterSunday(date, easterOptions).add({ days: DAYS_AFTER_EASTER_ASCENSION });
 }
 
 /**
@@ -119,7 +111,7 @@ export function getAscensionDay(date: DateInput, easterOptions: EasterOptions = 
  * @returns the date of Pentecost
  */
 export function getDayOfPentecost(date: DateInput, easterOptions: EasterOptions = {}): Temporal.PlainDate {
-  return getEasterSunday(date, easterOptions).add({ days: 49 });
+  return getEasterSunday(date, easterOptions).add({ days: DAYS_AFTER_EASTER_PENTECOST });
 }
 
 /**

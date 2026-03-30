@@ -70,6 +70,7 @@ export function generateFixedEvents(
           date: finalDate,
           eventType: "fixed",
           rules: fixedEvent.rules,
+          optional: fixedEvent.optional,
           originalDate: eventDate !== finalDate ? eventDate : undefined,
         });
 
@@ -85,6 +86,7 @@ export function generateFixedEvents(
             type: fixedEvent.type,
             date: eventDate,
             eventType: "fixed",
+            optional: true,
             observance: "secondary",
             originalDate: eventDate,
           });

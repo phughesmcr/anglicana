@@ -2002,7 +2002,14 @@
     ],
     "id": 214,
     "name": "Commemoration of the Faithful Departed (All Souls’ Day)",
-    "type": "lesser_festival"
+    "type": "lesser_festival",
+    "rules": [
+      {
+        "rule": "may_transfer",
+        "conditions": ["falls on Sunday"],
+        "transferTo": "Monday 3 November instead of Richard Hooker"
+      }
+    ]
   },
   {
     "date": [
@@ -2381,7 +2388,14 @@
     ],
     "id": 262,
     "name": "The Holy Innocents",
-    "type": "festival"
+    "type": "festival",
+    "rules": [
+      {
+        "rule": "may_transfer",
+        "conditions": ["falls on the First or Second Sunday of Christmas"],
+        "transferTo": "the first available day thereafter"
+      }
+    ]
   },
   {
     "alt": [

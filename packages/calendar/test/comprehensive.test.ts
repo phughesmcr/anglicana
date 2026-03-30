@@ -431,31 +431,26 @@ Deno.test("Multi-year calendar validation", async (t) => {
 // EDGE CASES AND TRANSFER RULES
 // =============================================================================
 
-Deno.test("Holy Innocents transfer edge case", async (t) => {
-  await t.step("transfers when Dec 28 is Sunday", () => {
+Deno.test("Holy Innocents Sunday edge case", async (t) => {
+  await t.step("may remain on Sunday when Dec 28 is the First or Second Sunday of Christmas", () => {
     // Find years where Dec 28 is Sunday
     for (let year = 2020; year <= 2040; year++) {
       const dec28 = new Temporal.PlainDate(year, 12, 28);
       if (dec28.dayOfWeek === 7) {
         // Dec 28 in year N is in liturgical year N (Advent N starts late Nov/early Dec of year N)
         const churchYear = year;
-        const calendar = generateLiturgicalCalendar(churchYear);
+        const calendar = generateLiturgicalCalendar(churchYear, {
+          canonicalMode: "pastoral",
+          includeCommemorationsAndLesserFestivals: true,
+        });
         const holyInnocents = calendar.find((e) => e.name === "The Holy Innocents");
 
         if (holyInnocents) {
-          // Should NOT be on Sunday (transferred)
-          assert(
-            holyInnocents.date.dayOfWeek !== 7,
-            `Holy Innocents should not be on Sunday in ${year} (found ${holyInnocents.date})`,
+          assertEquals(
+            holyInnocents.date.toString(),
+            dec28.toString(),
+            `Holy Innocents may be kept on Sunday in ${year}`,
           );
-          // Original date should be preserved
-          if (holyInnocents.originalDate) {
-            assertEquals(
-              holyInnocents.originalDate.toString(),
-              dec28.toString(),
-              `Original date should be Dec 28 in ${year}`,
-            );
-          }
         }
       }
     }

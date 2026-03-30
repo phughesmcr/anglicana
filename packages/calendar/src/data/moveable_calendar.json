@@ -113,6 +113,7 @@
     "type": "festival",
     "relative_to": "trinity_sunday",
     "offset_days": 4,
+    "optional": true,
     "rules": [
       {
         "rule": "may_transfer",
@@ -365,6 +366,7 @@
     "type": "special_observance",
     "relative_to": "easter",
     "offset_days": -1,
+    "optional": true,
     "rules": [
       {
         "rule": "cannot_transfer"
@@ -606,5 +608,18 @@
       }
     ],
     "description": "Wednesday, Friday, Saturday in week before Sunday nearest 29 September - prayer for ordinands"
+  },
+  {
+    "id": 53,
+    "name": "Nine Days of Prayer (after Ascension)",
+    "type": "special_observance_series",
+    "relative_to": "ascension_day",
+    "offset_days": 1,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ],
+    "description": "Nine days of prayer and preparation from the day after Ascension Day until Pentecost"
   }
 ]

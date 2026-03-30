@@ -21,14 +21,8 @@ export type {
   EucharisticProperAs,
   LocalEventInput,
 } from "@/calendar/calendar/types.ts";
-export type { FixedEvent, FixedEventResult } from "@/calendar/data/mod.ts";
-export type {
-  DateInput,
-  DateRange,
-  EasterOptions,
-  LiturgicalRank,
-  SundayLectionaryLetter,
-  WeekdayLectionaryNumber,
-} from "@/calendar/types.ts";
+export * from "@/calendar/constants.ts";
+export type { FixedEvent, FixedEventResult, MoveableEvent } from "@/calendar/data/mod.ts";
+export type * from "@/calendar/types.ts";
 
 export * from "@/calendar/temporal/mod.ts";

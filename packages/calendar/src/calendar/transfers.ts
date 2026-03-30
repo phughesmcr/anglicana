@@ -5,7 +5,7 @@
  * @module
  */
 
-import { LITURGICAL_RANK } from "../constants.ts";
+import { LITURGICAL_RANK, TEMPORAL_ISO_SUNDAY } from "../constants.ts";
 import {
   getAshWednesday,
   getClosestSunday,
@@ -14,6 +14,7 @@ import {
   getFirstSundayOfAdvent,
   getPalmSunday,
   getTheBaptismOfChrist,
+  isPlainDateInInclusiveRange,
 } from "../temporal/mod.ts";
 import type { EasterOptions } from "../types.ts";
 import {
@@ -21,7 +22,6 @@ import {
   FIXED_ALL_SOULS,
   FIXED_ANNUNCIATION,
   FIXED_GEORGE_ENGLAND,
-  FIXED_HOLY_INNOCENTS,
   FIXED_JOSEPH_OF_NAZARETH,
   FIXED_MARK_EVANGELIST,
   FIXED_RICHARD_HOOKER,
@@ -64,9 +64,6 @@ export function applyTransferRules(
     return context;
   };
 
-  const isBetweenInclusive = (date: Temporal.PlainDate, start: Temporal.PlainDate, end: Temporal.PlainDate) =>
-    Temporal.PlainDate.compare(date, start) >= 0 && Temporal.PlainDate.compare(date, end) <= 0;
-
   const adventStartCache = new Map<number, Temporal.PlainDate>();
   const getCachedAdventStart = (year: number) => {
     const cached = adventStartCache.get(year);
@@ -98,8 +95,12 @@ export function applyTransferRules(
 
   const isEasterWeek = (date: Temporal.PlainDate) => {
     const { easter } = getEasterContext(date.year);
-    return isBetweenInclusive(date, easter, easter.add({ days: 6 }));
+    return isPlainDateInInclusiveRange(date, easter, easter.add({ days: 6 }));
   };
+
+  const isFirstOrSecondSundayOfChristmas = (date: Temporal.PlainDate) =>
+    date.dayOfWeek === TEMPORAL_ISO_SUNDAY &&
+    ((date.month === 12 && date.day >= 26) || (date.month === 1 && date.day <= 5));
 
   const localExceptionsCache = new Map<number, Set<string>>();
   const getLocalTransferExceptions = (year: number) => {
@@ -124,7 +125,8 @@ export function applyTransferRules(
 
   const isBlockedLesserFestivalDate = (date: Temporal.PlainDate) => {
     const { palmSunday, secondSundayOfEaster } = getEasterContext(date.year);
-    return isBetweenInclusive(date, palmSunday, secondSundayOfEaster) || date.dayOfWeek === 7;
+    return isPlainDateInInclusiveRange(date, palmSunday, secondSundayOfEaster) ||
+      date.dayOfWeek === TEMPORAL_ISO_SUNDAY;
   };
 
   const transferred = events.map((event) => {
@@ -139,21 +141,21 @@ export function applyTransferRules(
     switch (event.id) {
       case FIXED_JOSEPH_OF_NAZARETH:
       case FIXED_GEORGE_ENGLAND:
-        if (isBetweenInclusive(originalDate, palmSunday, secondSundayOfEaster)) {
+        if (isPlainDateInInclusiveRange(originalDate, palmSunday, secondSundayOfEaster)) {
           updatedDate = secondSundayOfEaster.add({ days: 1 });
         }
         break;
       case FIXED_ANNUNCIATION:
-        if (isBetweenInclusive(originalDate, palmSunday, secondSundayOfEaster)) {
+        if (isPlainDateInInclusiveRange(originalDate, palmSunday, secondSundayOfEaster)) {
           updatedDate = secondSundayOfEaster.add({ days: 1 });
-        } else if (originalDate.dayOfWeek === 7) {
+        } else if (originalDate.dayOfWeek === TEMPORAL_ISO_SUNDAY) {
           updatedDate = originalDate.add({ days: 1 });
         }
         break;
       case FIXED_MARK_EVANGELIST: {
-        if (isBetweenInclusive(originalDate, palmSunday, secondSundayOfEaster)) {
+        if (isPlainDateInInclusiveRange(originalDate, palmSunday, secondSundayOfEaster)) {
           const georgeOriginal = new Temporal.PlainDate(originalDate.year, 4, 23);
-          const georgeTransferred = isBetweenInclusive(georgeOriginal, palmSunday, secondSundayOfEaster);
+          const georgeTransferred = isPlainDateInInclusiveRange(georgeOriginal, palmSunday, secondSundayOfEaster);
           updatedDate = secondSundayOfEaster.add({ days: georgeTransferred ? 2 : 1 });
         }
         break;
@@ -207,7 +209,7 @@ export function applyTransferRules(
     const localEventRequiresTransfer = (event.localType === "patronal" || event.localType === "dedication") &&
       localExceptions.has(originalDate.toString());
 
-    if (event.id === FIXED_ALL_SOULS && originalDate.dayOfWeek === 7) {
+    if (event.id === FIXED_ALL_SOULS && originalDate.dayOfWeek === TEMPORAL_ISO_SUNDAY) {
       const nov3 = new Temporal.PlainDate(originalDate.year, 11, 3);
       if (
         Temporal.PlainDate.compare(nov3, adventStart) >= 0 &&
@@ -235,26 +237,6 @@ export function applyTransferRules(
       }
     }
 
-    if (event.id === FIXED_HOLY_INNOCENTS && originalDate.dayOfWeek === 7) {
-      const monday = originalDate.add({ days: 1 });
-      if (
-        Temporal.PlainDate.compare(monday, adventStart) >= 0 &&
-        Temporal.PlainDate.compare(monday, adventEnd) < 0
-      ) {
-        const updatedEvent = {
-          ...event,
-          date: monday,
-          originalDate,
-        };
-        const key = dateKey(monday);
-        const list = eventsByDate.get(key) ?? [];
-        list.push(updatedEvent);
-        eventsByDate.set(key, list);
-        scheduled.push(updatedEvent);
-      }
-      continue;
-    }
-
     let targetDate = event.date;
     const season = getSeason(targetDate);
     const existing = eventsByDate.get(dateKey(targetDate)) ?? [];
@@ -275,7 +257,7 @@ export function applyTransferRules(
     }
 
     if (event.type === "commemoration") {
-      const hasSundayConflict = targetDate.dayOfWeek === 7;
+      const hasSundayConflict = targetDate.dayOfWeek === TEMPORAL_ISO_SUNDAY;
       if (hasPrincipalConflict || hasFestivalConflict || hasSundayConflict) {
         continue;
       }
@@ -299,7 +281,10 @@ export function applyTransferRules(
       }
     }
 
-    if (event.localType === "harvest" && targetDate.dayOfWeek === 7 && (hasPrincipalConflict || hasFestivalConflict)) {
+    if (
+      event.localType === "harvest" && targetDate.dayOfWeek === TEMPORAL_ISO_SUNDAY &&
+      (hasPrincipalConflict || hasFestivalConflict)
+    ) {
       let attempts = 0;
       while (attempts < 6) {
         targetDate = targetDate.add({ weeks: 1 });
@@ -312,7 +297,7 @@ export function applyTransferRules(
     }
     const mustTransferFestivalOnSunday = isFestival(event) &&
       !TRANSFER_EXEMPT_FESTIVAL_KEYS.has(eventSourceKey(event)) &&
-      targetDate.dayOfWeek === 7 &&
+      targetDate.dayOfWeek === TEMPORAL_ISO_SUNDAY &&
       (season === "advent" || season === "lent" || season === "eastertide");
     const mustTransferFestivalInEasterWeek = isFestival(event) &&
       !TRANSFER_EXEMPT_FESTIVAL_KEYS.has(eventSourceKey(event)) &&
@@ -320,7 +305,8 @@ export function applyTransferRules(
     const mustTransferFestivalOnOrdinarySunday = transferFestivalsOnOrdinarySundays &&
       isFestival(event) &&
       !TRANSFER_EXEMPT_FESTIVAL_KEYS.has(eventSourceKey(event)) &&
-      targetDate.dayOfWeek === 7 &&
+      targetDate.dayOfWeek === TEMPORAL_ISO_SUNDAY &&
+      !isFirstOrSecondSundayOfChristmas(targetDate) &&
       season === "other";
     const lesserFestivalMustTransfer = transferLesserFestivalsWhenBlocked &&
       event.type === "lesser_festival" &&
@@ -350,7 +336,8 @@ export function applyTransferRules(
         const dateSeason = getSeason(targetDate);
         const invalidSundayFestival = isFestival(event) &&
           !TRANSFER_EXEMPT_FESTIVAL_KEYS.has(eventSourceKey(event)) &&
-          targetDate.dayOfWeek === 7 &&
+          targetDate.dayOfWeek === TEMPORAL_ISO_SUNDAY &&
+          !isFirstOrSecondSundayOfChristmas(targetDate) &&
           (dateSeason === "advent" || dateSeason === "lent" || dateSeason === "eastertide" ||
             (dateSeason === "other" && transferFestivalsOnOrdinarySundays));
         const invalidEasterWeekFestival = isFestival(event) &&

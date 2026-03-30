@@ -25,6 +25,8 @@ export type FixedEvent = {
     conditions?: string[];
     transferTo?: string;
   }[];
+  /** Whether this observance is optional rather than universally required. */
+  optional?: boolean;
 };
 
 /** Fixed calendar event normalized to a specific year. */
@@ -35,6 +37,8 @@ export type FixedEventResult = Pick<FixedEvent, "id" | "name" | "type" | "group"
   date: Temporal.PlainDate;
   /** The alternative date of the event */
   alt?: Temporal.PlainDate;
+  /** Whether this observance is optional rather than universally required. */
+  optional?: boolean;
 };
 
 /** Raw fixed calendar events from data. */
@@ -87,10 +91,8 @@ export type MoveableEvent = {
     transferTo?: string;
   }[];
   description?: string;
+  optional?: boolean;
 };
 
 /** Raw moveable events from data. */
 export const MOVEABLE_EVENTS = MoveableEvents as MoveableEvent[];
-
-// to add:
-// "Nine Days of Prayer (after Ascension)",

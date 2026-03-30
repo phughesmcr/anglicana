@@ -375,6 +375,18 @@ Deno.test("Transfer rules integration", async (t) => {
     );
   });
 
+  await t.step("special-case transfer metadata stays aligned with Common Worship rules", () => {
+    const allSouls = FIXED_EVENTS.find((event) =>
+      event.name === "Commemoration of the Faithful Departed (All Souls’ Day)"
+    );
+    const holyInnocents = FIXED_EVENTS.find((event) => event.name === "The Holy Innocents");
+
+    assert(allSouls, "All Souls' Day data should exist");
+    assert(holyInnocents, "Holy Innocents data should exist");
+    assertEquals(allSouls.rules?.[0]?.rule, "may_transfer");
+    assertEquals(holyInnocents.rules?.[0]?.rule, "may_transfer");
+  });
+
   await t.step("festivals on Sundays in Advent transfer to the next available day", () => {
     const findAdventSundayYear = () => {
       for (let year = 2020; year <= 2040; year++) {
@@ -586,8 +598,8 @@ Deno.test("Calendar observances align with Common Worship parish defaults", () =
   assert(eventsOn("2026-02-15").includes("Sunday next before Lent"));
   assert(!calendar.some((event) => event.name === "Third Sunday before Lent"));
 
-  assert(eventsOn("2025-12-29").includes("The Holy Innocents"));
-  assert(!eventsOn("2025-12-28").includes("The Holy Innocents"));
+  assert(eventsOn("2025-12-28").includes("The Holy Innocents"));
+  assert(!eventsOn("2025-12-29").includes("The Holy Innocents"));
 
   assert(eventsOn("2026-03-15").includes("Mothering Sunday"));
   assert(eventsOn("2026-04-04").includes("Easter Eve"));

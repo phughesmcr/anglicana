@@ -5,8 +5,10 @@
  * @module
  */
 
+import { TEMPORAL_ISO_SUNDAY } from "../constants.ts";
 import { MOVEABLE_EVENTS } from "../data/mod.ts";
 import {
+  findFirstSundayInRange,
   getAscensionDay,
   getChristmasDay,
   getClosestSunday,
@@ -87,6 +89,7 @@ function generateSundaySeriesEvents(
         date: current,
         eventType: "moveable",
         rules: moveableEvent.rules,
+        optional: moveableEvent.optional,
         description: moveableEvent.description,
         relativeTo: moveableEvent.relative_to,
         offsetDays: moveableEvent.offset_days,
@@ -126,6 +129,7 @@ function generateSpecialObservanceSeriesEvents(
           date: candidate.date,
           eventType: "moveable",
           rules: moveableEvent.rules,
+          optional: moveableEvent.optional,
           description: moveableEvent.description,
           relativeTo: moveableEvent.relative_to,
           offsetDays: moveableEvent.offset_days,
@@ -151,6 +155,7 @@ function generateSpecialObservanceSeriesEvents(
           date,
           eventType: "moveable",
           rules: moveableEvent.rules,
+          optional: moveableEvent.optional,
           description: moveableEvent.description,
           relativeTo: moveableEvent.relative_to,
           offsetDays: moveableEvent.offset_days,
@@ -186,19 +191,11 @@ export function generateMoveableEvents(
   const advent3 = adventStart.add({ weeks: 2 });
   const lent2 = easter.subtract({ weeks: 5 });
 
-  const getSundayInRange = (start: Temporal.PlainDate, end: Temporal.PlainDate) => {
-    let current = start;
-    while (Temporal.PlainDate.compare(current, end) <= 0) {
-      if (current.dayOfWeek === 7) return current;
-      current = current.add({ days: 1 });
-    }
-    return null;
-  };
-  const firstSundayOfChristmas = getSundayInRange(
+  const firstSundayOfChristmas = findFirstSundayInRange(
     new Temporal.PlainDate(adventYear, 12, 26),
     new Temporal.PlainDate(followingYear, 1, 1),
   );
-  let secondSundayOfChristmas = getSundayInRange(
+  let secondSundayOfChristmas = findFirstSundayInRange(
     new Temporal.PlainDate(followingYear, 1, 2),
     new Temporal.PlainDate(followingYear, 1, 5),
   );
@@ -211,7 +208,7 @@ export function generateMoveableEvents(
   }
   const lastSundayOfOctober = (() => {
     const lastDay = new Temporal.PlainDate(followingYear, 10, 31);
-    const daysToSubtract = lastDay.dayOfWeek === 7 ? 0 : lastDay.dayOfWeek;
+    const daysToSubtract = lastDay.dayOfWeek === TEMPORAL_ISO_SUNDAY ? 0 : lastDay.dayOfWeek;
     return lastDay.subtract({ days: daysToSubtract });
   })();
   const remembranceSunday = getClosestSunday(new Temporal.PlainDate(followingYear, 11, 11));
@@ -231,6 +228,7 @@ export function generateMoveableEvents(
         date: adventStart.add({ weeks: weekOffset }),
         eventType: "moveable",
         rules: moveableEvent.rules,
+        optional: moveableEvent.optional,
         description: moveableEvent.description,
         relativeTo: moveableEvent.relative_to,
         offsetDays: moveableEvent.offset_days,
@@ -292,7 +290,9 @@ export function generateMoveableEvents(
       case "epiphany_easter_cycle":
         {
           const secondSundayBeforeLent = easter.subtract({ weeks: 8 });
-          let startSunday = epiphany.dayOfWeek === 7 ? epiphany.add({ weeks: 1 }) : getNextSunday(epiphany);
+          let startSunday = epiphany.dayOfWeek === TEMPORAL_ISO_SUNDAY
+            ? epiphany.add({ weeks: 1 })
+            : getNextSunday(epiphany);
           const baptismOfChrist = getTheBaptismOfChrist(followingYear, transferEpiphanyToSunday);
           let startOrdinalIndex = 0;
           if (Temporal.PlainDate.compare(startSunday, baptismOfChrist) === 0) {
@@ -380,6 +380,7 @@ export function generateMoveableEvents(
           date: eventDate,
           eventType: "moveable",
           rules: moveableEvent.rules,
+          optional: moveableEvent.optional,
           description: moveableEvent.description,
           relativeTo: moveableEvent.relative_to,
           offsetDays: moveableEvent.offset_days,
@@ -401,6 +402,7 @@ export function generateMoveableEvents(
         date: eventDate,
         eventType: "moveable",
         rules: moveableEvent.rules,
+        optional: moveableEvent.optional,
         description: moveableEvent.description,
         relativeTo: moveableEvent.relative_to,
         offsetDays: moveableEvent.offset_days,

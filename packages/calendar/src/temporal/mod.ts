@@ -8,6 +8,7 @@
  */
 
 export { getChurchYear, getFirstSundayOfAdvent, getLiturgicalYear, getLiturgicalYearRange } from "./advent.ts";
+export { findFirstSundayInRange, isPlainDateInInclusiveRange } from "./date_utils.ts";
 export {
   getAllDatesFromCalendar,
   getCommonWorshipCalendar,

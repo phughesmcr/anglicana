@@ -3,6 +3,7 @@
  * @module
  */
 
+import { DAYS_AFTER_TRINITY_CORPUS_CHRISTI, TEMPORAL_ISO_SUNDAY } from "../constants.ts";
 import type { DateInput, EasterOptions } from "../types.ts";
 import { getFirstSundayOfAdvent } from "./advent.ts";
 import { getEpiphany, getTrinitySunday } from "./principal_feasts.ts";
@@ -31,7 +32,7 @@ export function getTheBaptismOfChrist(date: DateInput, epiphanyOnSunday = false)
   }
 
   // Standard rule: First Sunday after Epiphany
-  if (epiphany.dayOfWeek === 7) {
+  if (epiphany.dayOfWeek === TEMPORAL_ISO_SUNDAY) {
     // If Epiphany is already a Sunday, go to next Sunday
     return epiphany.add({ days: 7 });
   } else {
@@ -48,7 +49,7 @@ export function getTheBaptismOfChrist(date: DateInput, epiphanyOnSunday = false)
  * @returns the date of Corpus Christi
  */
 export function getCorpusChristi(date: DateInput, easterOptions: EasterOptions = {}): Temporal.PlainDate {
-  return getTrinitySunday(date, easterOptions).add({ days: 4 });
+  return getTrinitySunday(date, easterOptions).add({ days: DAYS_AFTER_TRINITY_CORPUS_CHRISTI });
 }
 
 /**

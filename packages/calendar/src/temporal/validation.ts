@@ -3,11 +3,12 @@
  * @module
  */
 
+import { MAX_CALENDAR_YEAR, MIN_CALENDAR_YEAR } from "../constants.ts";
 import type { DateInput } from "../types.ts";
 
 /**
  * Validate a year input
- * @param year YYYY between 1583 and 9999
+ * @param year YYYY between {@link MIN_CALENDAR_YEAR} and {@link MAX_CALENDAR_YEAR}
  * @returns the year if valid
  * @throws {RangeError} if the year is invalid
  * @throws {TypeError} if the year is not a number
@@ -19,9 +20,10 @@ export function validateYear(year: number): number {
   if (!Number.isInteger(year)) {
     throw new RangeError("Invalid date: Year must be an integer");
   }
-  // To avoid weirdness with the Julian calendar
-  if (year < 1583 || year > 9999) {
-    throw new RangeError("Invalid date: Year must be >= 1583 and <= 9999");
+  if (year < MIN_CALENDAR_YEAR || year > MAX_CALENDAR_YEAR) {
+    throw new RangeError(
+      `Invalid date: Year must be >= ${MIN_CALENDAR_YEAR} and <= ${MAX_CALENDAR_YEAR}`,
+    );
   }
   return year;
 }

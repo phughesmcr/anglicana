@@ -2,6 +2,7 @@ import { assert, assertEquals } from "@std/assert";
 
 import {
   generateLiturgicalCalendar,
+  getAscensionDay,
   getEventsForDate,
   getSaturdayEveningPrayerCollectContext,
   getTrinitySundaySeriesInfo,
@@ -31,6 +32,7 @@ Deno.test("All Saints optional secondary observance on 1 November", async (t) =>
     const secondary = all.find((e) => e.observance === "secondary");
     assertExists(secondary);
     assertEquals(secondary.date.toString(), "2021-11-01");
+    assertEquals(secondary.optional, true);
     const principal = all.find((e) => e.observance === undefined);
     assertExists(principal);
     assertEquals(principal.date.toString(), "2021-10-31");
@@ -89,6 +91,47 @@ Deno.test("Saturday Evening Prayer collect of ensuing Sunday", async (t) => {
     const r = getSaturdayEveningPrayerCollectContext("2020-12-26", { liturgicalYear: 2020 });
     assertEquals(r.kind, "same_day");
     if (r.kind === "same_day") assertEquals(r.reason, "festival");
+  });
+});
+
+Deno.test("Festivals on the First or Second Sunday of Christmas are not forced off Sunday", async (t) => {
+  await t.step("Holy Innocents remains on Sunday in pastoral mode", () => {
+    const cal = generateLiturgicalCalendar(2025, {
+      canonicalMode: "pastoral",
+      includeCommemorationsAndLesserFestivals: false,
+    });
+    const holyInnocents = cal.find((e) => e.name === "The Holy Innocents");
+    assertExists(holyInnocents);
+    assertEquals(holyInnocents.date.toString(), "2025-12-28");
+  });
+});
+
+Deno.test("Nine Days of Prayer after Ascension are included in the generated calendar", async (t) => {
+  await t.step("emits nine observance days from the day after Ascension to Pentecost eve", () => {
+    const cal = generateLiturgicalCalendar(2025, {
+      includeCommemorationsAndLesserFestivals: false,
+    });
+    const novena = cal.filter((e) => e.name.startsWith("Nine Days of Prayer"));
+    assertEquals(novena.length, 9);
+
+    const ascension = getAscensionDay(2026);
+    assertEquals(novena[0]?.date.toString(), ascension.add({ days: 1 }).toString());
+    assertEquals(novena[8]?.date.toString(), ascension.add({ days: 9 }).toString());
+  });
+});
+
+Deno.test("Optional observances are flagged in generated output", async (t) => {
+  await t.step("Corpus Christi and Easter Vigil are marked optional", () => {
+    const cal = generateLiturgicalCalendar(2025, {
+      includeCommemorationsAndLesserFestivals: false,
+    });
+    const corpus = cal.find((e) => e.name === "Day of Thanksgiving for Holy Communion (Corpus Christi)");
+    const easterVigil = cal.find((e) => e.name === "Easter Vigil");
+
+    assertExists(corpus);
+    assertExists(easterVigil);
+    assertEquals(corpus.optional, true);
+    assertEquals(easterVigil.optional, true);
   });
 });
 
