@@ -1554,7 +1554,9 @@
           const dim = anchor.daysInMonth;
           for (let day = 1; day <= dim; day++) {
             liturgicalYears.add(
-              getLiturgicalYear(Temporal.PlainDate.from({ year: monthFirst.year, month: monthFirst.month, day })),
+              getLiturgicalYear(
+                Temporal.PlainDate.from({ year: monthFirst.year, month: monthFirst.month, day }),
+              ),
             );
           }
         }
