@@ -1,0 +1,610 @@
+[
+  {
+    "id": 1,
+    "name": "Easter Day",
+    "type": "principal_feast",
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ],
+    "description": "First Sunday after the first full moon occurring on or after the spring equinox"
+  },
+  {
+    "id": 2,
+    "name": "Ascension Day",
+    "type": "principal_feast",
+    "relative_to": "easter",
+    "offset_days": 39,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Day of Pentecost (Whit Sunday)",
+    "type": "principal_feast",
+    "relative_to": "easter",
+    "offset_days": 49,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Trinity Sunday",
+    "type": "principal_feast",
+    "relative_to": "easter",
+    "offset_days": 56,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Ash Wednesday",
+    "type": "principal_holy_day",
+    "relative_to": "easter",
+    "offset_days": -46,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Maundy Thursday",
+    "type": "principal_holy_day",
+    "relative_to": "easter",
+    "offset_days": -3,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Good Friday",
+    "type": "principal_holy_day",
+    "relative_to": "easter",
+    "offset_days": -2,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "The Baptism of Christ",
+    "type": "festival",
+    "relative_to": "epiphany",
+    "offset_days": 7,
+    "rules": [
+      {
+        "rule": "must_transfer",
+        "conditions": ["Epiphany 1, or Epiphany 2 when 6 January is a Sunday"]
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Christ the King",
+    "type": "festival",
+    "relative_to": "advent",
+    "offset_days": -7,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Day of Thanksgiving for Holy Communion (Corpus Christi)",
+    "type": "festival",
+    "relative_to": "trinity_sunday",
+    "offset_days": 4,
+    "rules": [
+      {
+        "rule": "may_transfer",
+        "conditions": ["if other festivals are observed"]
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "name": "First Sunday of Advent",
+    "type": "sunday",
+    "relative_to": "christmas",
+    "offset_days": -28,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Second Sunday of Advent",
+    "type": "sunday",
+    "relative_to": "christmas",
+    "offset_days": -21,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Third Sunday of Advent",
+    "type": "sunday",
+    "relative_to": "christmas",
+    "offset_days": -14,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Fourth Sunday of Advent",
+    "type": "sunday",
+    "relative_to": "christmas",
+    "offset_days": -7,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 47,
+    "name": "First Sunday of Christmas",
+    "type": "sunday",
+    "relative_to": "christmas_first_sunday",
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 48,
+    "name": "Second Sunday of Christmas",
+    "type": "sunday",
+    "relative_to": "christmas_second_sunday",
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Sundays after Epiphany",
+    "type": "sunday_series",
+    "relative_to": "epiphany_easter_cycle",
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ],
+    "description": "Variable number of Sundays between Epiphany season and pre-Lent period"
+  },
+  {
+    "id": 16,
+    "name": "Sunday next before Lent",
+    "type": "sunday",
+    "relative_to": "easter",
+    "offset_days": -49,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "name": "Second Sunday before Lent",
+    "type": "sunday",
+    "relative_to": "easter",
+    "offset_days": -56,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "name": "First Sunday of Lent",
+    "type": "sunday",
+    "relative_to": "easter",
+    "offset_days": -42,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "name": "Second Sunday of Lent",
+    "type": "sunday",
+    "relative_to": "easter",
+    "offset_days": -35,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "name": "Third Sunday of Lent",
+    "type": "sunday",
+    "relative_to": "easter",
+    "offset_days": -28,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "name": "Fourth Sunday of Lent",
+    "type": "sunday",
+    "relative_to": "easter",
+    "offset_days": -21,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 49,
+    "name": "Mothering Sunday",
+    "type": "special_observance",
+    "relative_to": "easter",
+    "offset_days": -21,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ],
+    "description": "Observed on the Fourth Sunday of Lent"
+  },
+  {
+    "id": 22,
+    "name": "Fifth Sunday of Lent (Passion Sunday)",
+    "type": "sunday",
+    "relative_to": "easter",
+    "offset_days": -14,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "name": "Palm Sunday",
+    "type": "sunday",
+    "relative_to": "easter",
+    "offset_days": -7,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "name": "Monday of Holy Week",
+    "type": "special_observance",
+    "relative_to": "easter",
+    "offset_days": -6,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "name": "Tuesday of Holy Week",
+    "type": "special_observance",
+    "relative_to": "easter",
+    "offset_days": -5,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "name": "Wednesday of Holy Week",
+    "type": "special_observance",
+    "relative_to": "easter",
+    "offset_days": -4,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "name": "Easter Eve",
+    "type": "special_observance",
+    "relative_to": "easter",
+    "offset_days": -1,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 50,
+    "name": "Easter Vigil",
+    "type": "special_observance",
+    "relative_to": "easter",
+    "offset_days": -1,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ],
+    "description": "Optional vigil service on Easter Eve"
+  },
+  {
+    "id": 28,
+    "name": "Second Sunday of Easter",
+    "type": "sunday",
+    "relative_to": "easter",
+    "offset_days": 7,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "name": "Third Sunday of Easter",
+    "type": "sunday",
+    "relative_to": "easter",
+    "offset_days": 14,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "name": "Fourth Sunday of Easter",
+    "type": "sunday",
+    "relative_to": "easter",
+    "offset_days": 21,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "name": "Fifth Sunday of Easter",
+    "type": "sunday",
+    "relative_to": "easter",
+    "offset_days": 28,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "name": "Sixth Sunday of Easter",
+    "type": "sunday",
+    "relative_to": "easter",
+    "offset_days": 35,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "name": "Seventh Sunday of Easter",
+    "type": "sunday",
+    "relative_to": "easter",
+    "offset_days": 42,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "name": "Rogation Monday",
+    "type": "special_observance",
+    "relative_to": "ascension_day",
+    "offset_days": -3,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ],
+    "description": "First of three Rogation Days - prayer for God's blessing on fruits of earth and human labour"
+  },
+  {
+    "id": 35,
+    "name": "Rogation Tuesday",
+    "type": "special_observance",
+    "relative_to": "ascension_day",
+    "offset_days": -2,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ],
+    "description": "Second of three Rogation Days - prayer for God's blessing on fruits of earth and human labour"
+  },
+  {
+    "id": 36,
+    "name": "Rogation Wednesday",
+    "type": "special_observance",
+    "relative_to": "ascension_day",
+    "offset_days": -1,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ],
+    "description": "Third of three Rogation Days - prayer for God's blessing on fruits of earth and human labour"
+  },
+  {
+    "id": 38,
+    "name": "Sundays after Trinity",
+    "type": "sunday_series",
+    "relative_to": "trinity_sunday",
+    "offset_days": 7,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ],
+    "description": "Variable number (typically 22-27) from Trinity Sunday until Fourth Sunday before Advent"
+  },
+  {
+    "id": 39,
+    "name": "Fourth Sunday before Advent",
+    "type": "sunday",
+    "relative_to": "advent",
+    "offset_days": -28,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 40,
+    "name": "Third Sunday before Advent",
+    "type": "sunday",
+    "relative_to": "advent",
+    "offset_days": -21,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 41,
+    "name": "Second Sunday before Advent",
+    "type": "sunday",
+    "relative_to": "advent",
+    "offset_days": -14,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 51,
+    "name": "Bible Sunday",
+    "type": "special_observance",
+    "relative_to": "advent",
+    "offset_days": -35,
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 52,
+    "name": "Remembrance Sunday",
+    "type": "special_observance",
+    "relative_to": "november_11_nearest_sunday",
+    "rules": [
+      {
+        "rule": "cannot_transfer"
+      }
+    ]
+  },
+  {
+    "id": 43,
+    "name": "Ember Days (Third Sunday of Advent week)",
+    "type": "special_observance_series",
+    "relative_to": "advent_3",
+    "offset_days": -3,
+    "rules": [
+      {
+        "rule": "bishops_direction"
+      }
+    ],
+    "description": "Wednesday, Friday, Saturday in week before Third Sunday of Advent - prayer for ordinands"
+  },
+  {
+    "id": 44,
+    "name": "Ember Days (Second Sunday of Lent week)",
+    "type": "special_observance_series",
+    "relative_to": "lent_2",
+    "offset_days": -3,
+    "rules": [
+      {
+        "rule": "bishops_direction"
+      }
+    ],
+    "description": "Wednesday, Friday, Saturday in week before Second Sunday of Lent - prayer for ordinands"
+  },
+  {
+    "id": 45,
+    "name": "Ember Days (Sunday nearest 29 June)",
+    "type": "special_observance_series",
+    "relative_to": "june_29_nearest_sunday",
+    "offset_days": -3,
+    "rules": [
+      {
+        "rule": "bishops_direction"
+      }
+    ],
+    "description": "Wednesday, Friday, Saturday in week before Sunday nearest 29 June - prayer for ordinands"
+  },
+  {
+    "id": 46,
+    "name": "Ember Days (Sunday nearest 29 September)",
+    "type": "special_observance_series",
+    "relative_to": "september_29_nearest_sunday",
+    "offset_days": -3,
+    "rules": [
+      {
+        "rule": "bishops_direction"
+      }
+    ],
+    "description": "Wednesday, Friday, Saturday in week before Sunday nearest 29 September - prayer for ordinands"
+  }
+]

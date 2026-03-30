@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "title": "Week of Prayer for Christian Unity",
+    "events": [
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22
+    ]
+  },
+  {
+    "id": 2,
+    "title": "O Sapientia",
+    "events": [
+      250,
+      251,
+      252,
+      253,
+      254,
+      255,
+      256
+    ]
+  }
+]

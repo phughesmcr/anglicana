@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Anglicana — church year</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --paper: #f6f3ee;
+        --ink: #1c1b19;
+        --ink-soft: #5c5854;
+        --line: color-mix(in srgb, var(--ink) 12%, transparent);
+        --line-strong: color-mix(in srgb, var(--ink) 20%, transparent);
+        --accent: #6b4c3b;
+        --accent-soft: color-mix(in srgb, var(--accent) 15%, var(--paper));
+        --outside-fg: #8a7a72;
+        --outside-bg: color-mix(in srgb, var(--outside-fg) 8%, var(--paper));
+        --card: #fffcf7;
+        --card-dark: #232220;
+        --shadow: 0 1px 0 var(--line), 0 12px 32px -16px color-mix(in srgb, var(--ink) 25%, transparent);
+        --radius: 12px;
+        --radius-sm: 8px;
+        --font-sans: "Newsreader", Georgia, "Times New Roman", serif;
+        --font-display: "Fraunces", Georgia, serif;
+        --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --paper: #1a1918;
+          --ink: #ebe8e3;
+          --ink-soft: #9c9893;
+          --line: color-mix(in srgb, var(--ink) 14%, transparent);
+          --line-strong: color-mix(in srgb, var(--ink) 28%, transparent);
+          --accent: #c4a882;
+          --accent-soft: color-mix(in srgb, var(--accent) 12%, var(--paper));
+          --outside-fg: #7a726b;
+          --outside-bg: color-mix(in srgb, var(--ink) 6%, var(--paper));
+          --card: #22211f;
+          --card-dark: #1a1918;
+          --shadow: 0 1px 0 var(--line), 0 16px 40px -18px #000a;
+        }
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: var(--font-sans);
+        font-size: 1.02rem;
+        line-height: 1.55;
+        color: var(--ink);
+        background: var(--paper);
+        background-image: radial-gradient(ellipse 120% 80% at 50% -20%, var(--accent-soft), transparent);
+        min-height: 100dvh;
+        position: relative;
+      }
+
+      body::after {
+        content: "";
+        pointer-events: none;
+        position: fixed;
+        inset: 0;
+        opacity: 0.045;
+        z-index: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      .skip-link {
+        position: absolute;
+        top: 0.75rem;
+        left: 50%;
+        transform: translate(-50%, -120%);
+        z-index: 100;
+        padding: 0.5rem 1rem;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: var(--card);
+        background: var(--accent);
+        border-radius: 6px;
+        box-shadow: var(--shadow);
+        transition: transform 0.2s ease;
+      }
+
+      .skip-link:focus {
+        transform: translate(-50%, 0);
+        outline: 2px solid color-mix(in srgb, var(--accent) 50%, var(--ink));
+        outline-offset: 2px;
+      }
+
+      .wrap {
+        position: relative;
+        z-index: 1;
+        max-width: 72rem;
+        margin: 0 auto;
+        padding: clamp(1.25rem, 4vw, 2.5rem) clamp(1rem, 3vw, 1.75rem) 4rem;
+      }
+
+      #showcase {
+        scroll-margin-top: 1rem;
+      }
+
+      .hero {
+        margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+      }
+
+      .hero h1 {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(1.75rem, 4vw, 2.35rem);
+        line-height: 1.12;
+        letter-spacing: -0.025em;
+        margin: 0 0 0.75rem;
+        color: var(--ink);
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .hero h1 {
+          animation: hero-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .hero-lede {
+          animation: hero-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.06s both;
+        }
+      }
+
+      @keyframes hero-in {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .hero-lede {
+        font-size: 1.05rem;
+        color: var(--ink-soft);
+        max-width: 38em;
+        margin: 0 0 1.25rem;
+      }
+
+      .range {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 0.75rem 1rem;
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+
+      .range__chips {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 1rem;
+        min-width: 0;
+        flex: 1 1 auto;
+      }
+
+      .range__actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+      }
+
+      .btn-today {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 0.4rem 0.75rem;
+        border-radius: 999px;
+        border: 1px solid var(--line-strong);
+        background: color-mix(in srgb, var(--accent) 10%, var(--card));
+        color: var(--ink);
+        cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+      }
+
+      .btn-today:hover {
+        background: color-mix(in srgb, var(--accent) 18%, var(--card));
+        border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+      }
+
+      .btn-today:focus-visible {
+        outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
+        outline-offset: 2px;
+      }
+
+      .btn-today:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .btn-today:not(:disabled):active {
+        transform: scale(0.98);
+      }
+
+      .range__label {
+        font-family: var(--font-sans);
+        font-weight: 600;
+        font-size: 0.7rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      .range__chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.35rem 0.65rem;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        box-shadow: 0 1px 0 var(--line);
+      }
+
+      .range__arrow {
+        color: var(--ink-soft);
+        font-weight: 400;
+      }
+
+      details.how {
+        margin-top: 1.25rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        background: color-mix(in srgb, var(--card) 80%, transparent);
+        padding: 0;
+        max-width: 40rem;
+      }
+
+      details.how summary {
+        cursor: pointer;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.65rem 0.85rem;
+        list-style-position: outside;
+        margin-left: 0.5rem;
+        color: var(--ink-soft);
+      }
+
+      details.how summary:hover {
+        color: var(--ink);
+      }
+
+      details.how[open] summary {
+        border-bottom: 1px solid var(--line);
+      }
+
+      details.how .how-body {
+        padding: 0.75rem 1rem 1rem;
+        font-size: 0.88rem;
+        color: var(--ink-soft);
+        line-height: 1.55;
+      }
+
+      details.how code {
+        font-family: var(--font-mono);
+        font-size: 0.82em;
+        padding: 0.12em 0.35em;
+        border-radius: 4px;
+        background: var(--accent-soft);
+        color: var(--ink);
+      }
+
+      #months {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+        gap: clamp(1rem, 2.5vw, 1.35rem);
+        align-items: start;
+      }
+
+      .month {
+        border-radius: var(--radius);
+        background: var(--card);
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+        overflow: clip;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .month {
+          animation: month-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .month:nth-child(1) {
+          animation-delay: 0.02s;
+        }
+        .month:nth-child(2) {
+          animation-delay: 0.05s;
+        }
+        .month:nth-child(3) {
+          animation-delay: 0.08s;
+        }
+        .month:nth-child(4) {
+          animation-delay: 0.11s;
+        }
+        .month:nth-child(5) {
+          animation-delay: 0.14s;
+        }
+        .month:nth-child(6) {
+          animation-delay: 0.17s;
+        }
+        .month:nth-child(7) {
+          animation-delay: 0.2s;
+        }
+        .month:nth-child(8) {
+          animation-delay: 0.23s;
+        }
+        .month:nth-child(9) {
+          animation-delay: 0.26s;
+        }
+        .month:nth-child(10) {
+          animation-delay: 0.29s;
+        }
+        .month:nth-child(11) {
+          animation-delay: 0.32s;
+        }
+        .month:nth-child(12) {
+          animation-delay: 0.35s;
+        }
+      }
+
+      @keyframes month-rise {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .month__head {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        padding: 0.85rem 1rem 0.75rem;
+        border-bottom: 1px solid var(--line);
+        background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 8%, var(--card)) 0%, var(--card) 92%);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+
+      .month__title {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 1.15rem;
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+
+      .month__list {
+        padding: 0;
+        max-height: min(70vh, 36rem);
+        overflow-y: auto;
+        scrollbar-gutter: stable;
+      }
+
+      .month__list::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .month__list::-webkit-scrollbar-thumb {
+        background: var(--line-strong);
+        border-radius: 4px;
+      }
+
+      .day {
+        position: relative;
+        --lit-band-base: var(--card);
+        display: grid;
+        grid-template-columns: 2rem 1fr;
+        gap: 0.5rem 0.65rem;
+        padding: 0.45rem 0.85rem 0.5rem 0.75rem;
+        border-bottom: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+        align-items: start;
+      }
+
+      /* Liturgical strip: same paint on calendar days (::after) and legend samples (.legend-key__lit) */
+      .day::after,
+      .legend-key__lit {
+        width: 1.35rem;
+        border-radius: 0 6px 6px 0;
+        pointer-events: none;
+        background:
+          linear-gradient(var(--lit-line, var(--line-strong)), var(--lit-line, var(--line-strong))) right / 3px 100%
+          no-repeat,
+          linear-gradient(
+          to left,
+          color-mix(in srgb, var(--lit-bg, var(--ink)) 6%, var(--lit-band-base)),
+          transparent
+        );
+      }
+
+      .day::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        right: 4px;
+        bottom: 3px;
+      }
+
+      .legend-key__day-snippet {
+        position: relative;
+        flex-shrink: 0;
+        width: 3.35rem;
+        min-height: 2.05rem;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        box-shadow: 0 1px 0 var(--line);
+      }
+
+      .legend-key__lit {
+        position: absolute;
+        top: 3px;
+        right: 4px;
+        bottom: 3px;
+        --lit-band-base: var(--card);
+      }
+
+      .day--outside {
+        --lit-band-base: var(--outside-bg);
+        background: var(--outside-bg);
+      }
+
+      .day[data-lit-color="purple"],
+      .legend-key__lit[data-lit-color="purple"] {
+        --lit-line: #4f3d6b;
+        --lit-bg: #4f3d6b;
+      }
+
+      /* Festal white: warm ivory / gold so it never reads as “grey” next to black */
+      .day[data-lit-color="white"],
+      .legend-key__lit[data-lit-color="white"] {
+        --lit-line: #8f7a4a;
+        --lit-bg: #b5a06e;
+      }
+
+      .day[data-lit-color="red"],
+      .legend-key__lit[data-lit-color="red"] {
+        --lit-line: #a82c24;
+        --lit-bg: #a82c24;
+      }
+
+      .day[data-lit-color="green"],
+      .legend-key__lit[data-lit-color="green"] {
+        --lit-line: #1f6f47;
+        --lit-bg: #1f6f47;
+      }
+
+      .day[data-lit-color="rose"],
+      .legend-key__lit[data-lit-color="rose"] {
+        --lit-line: #b85c72;
+        --lit-bg: #b85c72;
+      }
+
+      /* Black: near-black bar; tint stays cool/dark so 6% mix stays distinct from white */
+      .day[data-lit-color="black"],
+      .legend-key__lit[data-lit-color="black"] {
+        --lit-line: #0f0e0d;
+        --lit-bg: #252422;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .day[data-lit-color="purple"],
+        .legend-key__lit[data-lit-color="purple"] {
+          --lit-line: #9b7ec9;
+          --lit-bg: #9b7ec9;
+        }
+
+        .day[data-lit-color="white"],
+        .legend-key__lit[data-lit-color="white"] {
+          --lit-line: #ebe4d8;
+          --lit-bg: #c9bc9f;
+        }
+
+        .day[data-lit-color="red"],
+        .legend-key__lit[data-lit-color="red"] {
+          --lit-line: #e07066;
+          --lit-bg: #e07066;
+        }
+
+        .day[data-lit-color="green"],
+        .legend-key__lit[data-lit-color="green"] {
+          --lit-line: #4cb88a;
+          --lit-bg: #4cb88a;
+        }
+
+        .day[data-lit-color="rose"],
+        .legend-key__lit[data-lit-color="rose"] {
+          --lit-line: #d891a6;
+          --lit-bg: #d891a6;
+        }
+
+        .day[data-lit-color="black"],
+        .legend-key__lit[data-lit-color="black"] {
+          --lit-line: #0a0a09;
+          --lit-bg: #1e1d1b;
+        }
+      }
+
+      .day:last-child {
+        border-bottom: none;
+      }
+
+      .day--today {
+        --lit-band-base: color-mix(in srgb, var(--accent) 9%, var(--card));
+        background: color-mix(in srgb, var(--accent) 9%, var(--card));
+        box-shadow: inset 3px 0 0 var(--accent);
+      }
+
+      .day--today.day--outside {
+        --lit-band-base: color-mix(in srgb, var(--accent) 9%, var(--outside-bg));
+        background: color-mix(in srgb, var(--accent) 9%, var(--outside-bg));
+      }
+
+      .day--today .day__num {
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .day:focus-visible {
+        outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+        outline-offset: 2px;
+      }
+
+      .day--outside .day__num,
+      .day--outside .day__dow {
+        color: var(--outside-fg);
+      }
+
+      .day__meta {
+        text-align: right;
+        padding-top: 0.1rem;
+      }
+
+      .day__num {
+        font-family: var(--font-mono);
+        font-weight: 500;
+        font-size: 0.95rem;
+        line-height: 1.1;
+        display: block;
+        color: var(--ink);
+      }
+
+      .day__dow {
+        font-size: 0.65rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        margin-top: 0.15rem;
+      }
+
+      .day__events {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        min-width: 0;
+      }
+
+      .day__empty {
+        font-size: 0.82rem;
+        color: var(--ink-soft);
+        font-style: italic;
+        padding: 0.15rem 0;
+      }
+
+      .tag {
+        display: block;
+        font-size: 0.72rem;
+        line-height: 1.35;
+        padding: 0.28rem 0.45rem 0.32rem;
+        border-radius: 6px;
+        border-left: 3px solid var(--tag-line, var(--line-strong));
+        background: color-mix(in srgb, var(--tag-bg, var(--ink)) 6%, var(--card));
+        color: var(--ink);
+        transition: transform 0.12s ease, box-shadow 0.12s ease;
+      }
+
+      .tag__type {
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        display: block;
+        margin-bottom: 0.12rem;
+      }
+
+      .tag[data-type="principal_feast"] {
+        --tag-line: #8b5cf0;
+        --tag-bg: #8b5cf0;
+      }
+      .tag[data-type="principal_holy_day"] {
+        --tag-line: #7c3aed;
+        --tag-bg: #7c3aed;
+      }
+      .tag[data-type="festival"] {
+        --tag-line: #0d9488;
+        --tag-bg: #0d9488;
+      }
+      .tag[data-type="lesser_festival"] {
+        --tag-line: #0891b2;
+        --tag-bg: #0891b2;
+      }
+      .tag[data-type="commemoration"] {
+        --tag-line: #78716c;
+        --tag-bg: #78716c;
+      }
+      .tag[data-type="sunday"] {
+        --tag-line: var(--accent);
+        --tag-bg: var(--accent);
+      }
+      .tag[data-type="special_observance"] {
+        --tag-line: #ca8a04;
+        --tag-bg: #ca8a04;
+      }
+      .tag[data-type="sunday_series"],
+      .tag[data-type="special_observance_series"] {
+        --tag-line: #b45309;
+        --tag-bg: #b45309;
+      }
+      .tag[data-type="weekday"] {
+        --tag-line: #64748b;
+        --tag-bg: #64748b;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .tag:hover {
+          transform: translateX(2px);
+          box-shadow: 0 2px 12px -4px color-mix(in srgb, var(--tag-bg, var(--ink)) 35%, transparent);
+        }
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .tag[data-type="principal_feast"] {
+          --tag-line: #a78bfa;
+          --tag-bg: #a78bfa;
+        }
+        .tag[data-type="principal_holy_day"] {
+          --tag-line: #c4b5fd;
+          --tag-bg: #c4b5fd;
+        }
+        .tag[data-type="festival"] {
+          --tag-line: #2dd4bf;
+          --tag-bg: #2dd4bf;
+        }
+        .tag[data-type="lesser_festival"] {
+          --tag-line: #22d3ee;
+          --tag-bg: #22d3ee;
+        }
+        .tag[data-type="commemoration"] {
+          --tag-line: #a8a29e;
+          --tag-bg: #a8a29e;
+        }
+        .tag[data-type="special_observance"] {
+          --tag-line: #fbbf24;
+          --tag-bg: #fbbf24;
+        }
+        .tag[data-type="sunday_series"],
+        .tag[data-type="special_observance_series"] {
+          --tag-line: #fdba74;
+          --tag-bg: #fdba74;
+        }
+        .tag[data-type="weekday"] {
+          --tag-line: #94a3b8;
+          --tag-bg: #94a3b8;
+        }
+      }
+
+      .demo-controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 1rem 1.5rem;
+        margin-bottom: 1.25rem;
+        padding: 1rem 1.1rem;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        background: color-mix(in srgb, var(--card) 85%, transparent);
+        box-shadow: 0 1px 0 var(--line), inset 0 1px 0 color-mix(in srgb, var(--ink) 4%, transparent);
+      }
+
+      .demo-controls .field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        min-width: 0;
+      }
+
+      .demo-controls label,
+      .demo-controls legend {
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      .demo-controls legend {
+        padding: 0;
+        margin-bottom: 0.35rem;
+      }
+
+      .demo-controls input[type="number"] {
+        font-family: var(--font-mono);
+        font-size: 0.95rem;
+        width: 6.5rem;
+        padding: 0.45rem 0.55rem;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--card);
+        color: var(--ink);
+      }
+
+      .demo-controls input[type="number"]:focus {
+        outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
+        outline-offset: 1px;
+      }
+
+      .demo-controls select {
+        font-family: var(--font-sans);
+        font-size: 0.9rem;
+        max-width: 22rem;
+        padding: 0.45rem 0.55rem;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--card);
+        color: var(--ink);
+      }
+
+      .demo-controls select:focus {
+        outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
+        outline-offset: 1px;
+      }
+
+      .demo-controls textarea.opts-textarea {
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        line-height: 1.4;
+        width: 100%;
+        max-width: 42rem;
+        padding: 0.55rem 0.65rem;
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: var(--card);
+        color: var(--ink);
+        resize: vertical;
+        min-height: 6rem;
+      }
+
+      .demo-controls textarea.opts-textarea:focus {
+        outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
+        outline-offset: 1px;
+      }
+
+      .field-hint {
+        margin: 0.35rem 0 0;
+        font-size: 0.78rem;
+        line-height: 1.45;
+        color: var(--ink-soft);
+        max-width: 42rem;
+      }
+
+      .options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+        gap: 0.45rem 1rem;
+        margin-top: 0.35rem;
+      }
+
+      .options-grid label.opt-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.45rem;
+        font-family: var(--font-sans);
+        font-size: 0.84rem;
+        font-weight: 500;
+        letter-spacing: normal;
+        text-transform: none;
+        color: var(--ink);
+        cursor: pointer;
+        line-height: 1.4;
+      }
+
+      .options-grid .opt-row input {
+        accent-color: var(--accent);
+        width: 1rem;
+        height: 1rem;
+        margin-top: 0.12rem;
+        flex-shrink: 0;
+      }
+
+      .demo-controls fieldset {
+        border: none;
+        margin: 0;
+        padding: 0;
+        min-width: 0;
+      }
+
+      .demo-controls .field--wide {
+        flex: 1 1 100%;
+      }
+
+      .demo-controls .mode-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem 1rem;
+      }
+
+      .demo-controls .mode-options label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        letter-spacing: normal;
+        text-transform: none;
+        color: var(--ink);
+        cursor: pointer;
+      }
+
+      .demo-controls .mode-options input {
+        accent-color: var(--accent);
+        width: 1rem;
+        height: 1rem;
+      }
+
+      .mode-hint {
+        margin: 0.6rem 0 0;
+        padding: 0;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        color: var(--ink-soft);
+        max-width: 38rem;
+      }
+
+      .mode-hint strong {
+        font-weight: 600;
+        color: var(--ink);
+      }
+
+      .demo-error {
+        margin: 0 0 1rem;
+        padding: 0.65rem 0.85rem;
+        font-size: 0.88rem;
+        border-radius: var(--radius-sm);
+        border: 1px solid color-mix(in srgb, #b91c1c 35%, var(--line));
+        background: color-mix(in srgb, #b91c1c 8%, var(--card));
+        color: var(--ink);
+      }
+
+      details.legend {
+        margin: 1rem 0 0;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        background: color-mix(in srgb, var(--card) 75%, transparent);
+        max-width: 44rem;
+      }
+
+      details.legend summary {
+        cursor: pointer;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 0.55rem 0.85rem;
+        color: var(--accent);
+        list-style-position: outside;
+        margin-left: 0.35rem;
+      }
+
+      details.legend summary:hover {
+        color: var(--ink);
+      }
+
+      details.legend[open] summary {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .legend-key-intro {
+        margin: 0;
+        padding: 0.65rem 0.85rem 0.25rem;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        color: var(--ink-soft);
+        max-width: 42rem;
+      }
+
+      .legend-key-code {
+        font-family: var(--font-mono);
+        font-size: 0.85em;
+        padding: 0.08em 0.32em;
+        border-radius: 4px;
+        background: var(--accent-soft);
+        color: var(--ink);
+      }
+
+      .legend-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+        gap: 0.4rem 0.75rem;
+        padding: 0.75rem 0.85rem 0.9rem;
+        font-size: 0.8rem;
+        color: var(--ink-soft);
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        min-width: 0;
+      }
+
+      /* Event key: real .tag chips on the same card surface as the month lists */
+      .legend-key__chip-frame {
+        flex-shrink: 0;
+        padding: 0.35rem 0.45rem;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        box-shadow: 0 1px 0 var(--line);
+      }
+
+      .legend-key__tag.tag {
+        min-width: 2.75rem;
+        min-height: 1.95rem;
+        margin: 0;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .legend-key__tag.tag:hover {
+          transform: none;
+          box-shadow: none;
+        }
+      }
+
+      .legend--lit-colour .legend-lit-body {
+        margin: 0;
+        padding: 0.65rem 0.85rem 0.35rem;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        color: var(--ink-soft);
+        max-width: 40rem;
+      }
+
+      .legend-grid--lit {
+        padding-top: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <a class="skip-link" href="#showcase">Skip to calendar</a>
+      <header class="hero">
+        <h1>Church year at a glance</h1>
+        <p class="hero-lede">
+          Every day in twelve calendar months from the month of Advent Sunday — with or without liturgical observances —
+          so you can scroll and compare.
+        </p>
+        <form class="demo-controls" id="demo-controls" aria-label="Liturgical calendar options">
+          <div class="field">
+            <label for="church-year">Church year</label>
+            <input
+              id="church-year"
+              name="churchYear"
+              type="number"
+              min="1583"
+              max="9999"
+              step="1"
+              value="2026"
+              required
+            />
+          </div>
+
+          <fieldset class="field field--wide" title="canonicalMode">
+            <legend>Calendar defaults</legend>
+            <div class="mode-options">
+              <label><input type="radio" name="canonicalMode" value="canonical" checked />
+                Canonical</label>
+              <label><input type="radio" name="canonicalMode" value="pastoral" />
+                Pastoral</label>
+            </div>
+            <p class="mode-hint">
+              Presets the transfer checkboxes below when you switch mode. <strong>Canonical</strong> matches the
+              calendar table for optional moves. <strong>Pastoral</strong> matches typical parish defaults. You can
+              still override any checkbox afterwards.
+            </p>
+          </fieldset>
+
+          <fieldset class="field field--wide" title="easterOptions">
+            <legend>Easter date</legend>
+            <select
+              id="easter-style"
+              name="easterStyle"
+              aria-label="Which Easter calculation to use for moveable feasts"
+            >
+              <option value="western" selected>Western — Gregorian calendar (Church of England default)</option>
+              <option value="julian">Julian — Easter on the Julian calendar</option>
+              <option value="orthodox">Orthodox — Julian Easter, Gregorian civil dates</option>
+            </select>
+            <p class="field-hint">
+              Controls how Easter (and dependent feasts) are computed. Western matches the usual Church of England
+              reckoning.
+            </p>
+          </fieldset>
+
+          <fieldset class="field field--wide">
+            <legend>Transfers &amp; calendar contents</legend>
+            <p class="field-hint">
+              Wording follows Common Worship. Hover a checkbox row to see the matching API property on
+              <code>CalendarOptions</code>. All of these are applied on every refresh.
+            </p>
+            <div class="options-grid">
+              <label class="opt-row" title="transferEpiphanyToSunday"><input
+                  type="checkbox"
+                  name="transferEpiphanyToSunday"
+                />
+                Transfer Epiphany to the Sunday between 2 and 8 January</label>
+              <label class="opt-row" title="transferPresentationToSunday"><input
+                  type="checkbox"
+                  name="transferPresentationToSunday"
+                />
+                Transfer Candlemas (Presentation) to Sunday</label>
+              <label class="opt-row" title="transferAllSaintsToSunday"><input
+                  type="checkbox"
+                  name="transferAllSaintsToSunday"
+                />
+                Transfer All Saints&rsquo; Day to Sunday</label>
+              <label class="opt-row" title="transferBlessedVirginMaryToSeptember"><input
+                  type="checkbox"
+                  name="transferBlessedVirginMaryToSeptember"
+                />
+                Transfer the Blessed Virgin Mary (Assumption) to 8 September</label>
+              <label class="opt-row" title="transferFestivalsOnOrdinarySundays"><input
+                  type="checkbox"
+                  name="transferFestivalsOnOrdinarySundays"
+                />
+                Transfer festivals on ordinary Sundays to Monday</label>
+              <label class="opt-row" title="transferLesserFestivalsWhenBlocked"><input
+                  type="checkbox"
+                  name="transferLesserFestivalsWhenBlocked"
+                />
+                Transfer blocked lesser festivals to the next available day</label>
+              <label class="opt-row" title="transferLocalPrincipalToNearestSunday"><input
+                  type="checkbox"
+                  name="transferLocalPrincipalToNearestSunday"
+                />
+                Transfer local principal feasts to the nearest Sunday</label>
+              <label class="opt-row" title="includeCommemorationsAndLesserFestivals"><input
+                  type="checkbox"
+                  name="includeCommemorationsAndLesserFestivals"
+                  checked
+                />
+                Include commemorations and lesser festivals</label>
+              <label class="opt-row" title="includeAllSaintsSecondaryOnNovember1"><input
+                  type="checkbox"
+                  name="includeAllSaintsSecondaryOnNovember1"
+                />
+                When All Saints moves to Sunday, also show a principal feast on 1 November</label>
+              <label class="opt-row" title="bcpGeorgeMarkTransferHarmonisation"><input
+                  type="checkbox"
+                  name="bcpGeorgeMarkTransferHarmonisation"
+                />
+                BCP-style alignment for St George and St Mark after Easter (Rules)</label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field field--wide" title="localEvents">
+            <legend>Local celebrations</legend>
+            <textarea
+              id="local-events-json"
+              name="localEventsJson"
+              class="opts-textarea"
+              rows="5"
+              spellcheck="false"
+              aria-label="Optional JSON list of local celebrations"
+              placeholder='[
+  {
+    "name": "Dedication of the church",
+    "type": "festival",
+    "date": "2026-10-12",
+    "localType": "dedication"
+  }
+]'
+            ></textarea>
+            <p class="field-hint">
+              Optional parish or cathedral extras — patronal festivals, dedications, harvest thanksgiving, and the like.
+              Paste a <strong>JSON array</strong>; each entry needs at least a <code>name</code>, liturgical
+              <code>type</code>, and ISO <code>date</code> (optional fields such as <code>localType</code> are allowed).
+              Leave empty if you do not need any. Malformed JSON is shown as an error below. The library type is <code
+              >LocalEventInput</code>.
+            </p>
+          </fieldset>
+        </form>
+        <p id="demo-error" class="demo-error" hidden role="alert" aria-live="polite"></p>
+        <div class="range" id="range" aria-label="Church year summary">
+          <div class="range__chips" id="range-chips"></div>
+          <div class="range__actions">
+            <button type="button" class="btn-today" id="jump-today" disabled aria-disabled="true">
+              Scroll to today
+            </button>
+          </div>
+        </div>
+        <details class="legend">
+          <summary>Event type key</summary>
+          <p class="legend-key-intro">
+            Swatches are the same <code class="legend-key-code">.tag</code> chips as in the month columns, on the same
+            card background and border as a day list.
+          </p>
+          <div class="legend-grid" aria-label="How event chips are coloured in the calendar">
+            <div class="legend-item">
+              <div class="legend-key__chip-frame" aria-hidden="true">
+                <span class="tag legend-key__tag" data-type="principal_feast"></span>
+              </div>
+              <span>Principal feast</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-key__chip-frame" aria-hidden="true">
+                <span class="tag legend-key__tag" data-type="principal_holy_day"></span>
+              </div>
+              <span>Principal holy day</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-key__chip-frame" aria-hidden="true">
+                <span class="tag legend-key__tag" data-type="festival"></span>
+              </div>
+              <span>Festival</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-key__chip-frame" aria-hidden="true">
+                <span class="tag legend-key__tag" data-type="lesser_festival"></span>
+              </div>
+              <span>Lesser festival</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-key__chip-frame" aria-hidden="true">
+                <span class="tag legend-key__tag" data-type="commemoration"></span>
+              </div>
+              <span>Commemoration</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-key__chip-frame" aria-hidden="true">
+                <span class="tag legend-key__tag" data-type="sunday"></span>
+              </div>
+              <span>Sunday</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-key__chip-frame" aria-hidden="true">
+                <span class="tag legend-key__tag" data-type="special_observance"></span>
+              </div>
+              <span>Special observance</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-key__chip-frame" aria-hidden="true">
+                <span class="tag legend-key__tag" data-type="sunday_series"></span>
+              </div>
+              <span>Sunday / observance series</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-key__chip-frame" aria-hidden="true">
+                <span class="tag legend-key__tag" data-type="weekday"></span>
+              </div>
+              <span>Weekday</span>
+            </div>
+          </div>
+        </details>
+        <details class="legend legend--lit-colour">
+          <summary>Liturgical colours key</summary>
+          <p class="legend-lit-body">
+            Each strip uses the <strong>same CSS as the right edge of a day row</strong> (tint + 3px bar on
+            <code class="legend-key-code">var(--card)</code>). The colour is a <strong>rough guide</strong> only: Holy
+            Week and seasons use the calendar; white or red on other days follows the highest-ranked feast or festival
+            listed. It is not a substitute for the Ordinal or local customary where these differ.
+          </p>
+          <div class="legend-grid legend-grid--lit">
+            <div class="legend-item">
+              <div class="legend-key__day-snippet" aria-hidden="true">
+                <span class="legend-key__lit" data-lit-color="purple"></span>
+              </div>
+              <span>Purple</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-key__day-snippet" aria-hidden="true">
+                <span class="legend-key__lit" data-lit-color="white"></span>
+              </div>
+              <span>White</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-key__day-snippet" aria-hidden="true">
+                <span class="legend-key__lit" data-lit-color="red"></span>
+              </div>
+              <span>Red</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-key__day-snippet" aria-hidden="true">
+                <span class="legend-key__lit" data-lit-color="green"></span>
+              </div>
+              <span>Green</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-key__day-snippet" aria-hidden="true">
+                <span class="legend-key__lit" data-lit-color="rose"></span>
+              </div>
+              <span>Rose</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-key__day-snippet" aria-hidden="true">
+                <span class="legend-key__lit" data-lit-color="black"></span>
+              </div>
+              <span>Black</span>
+            </div>
+          </div>
+        </details>
+      </header>
+      <main id="showcase" tabindex="-1">
+        <div id="months"></div>
+      </main>
+    </div>
+
+    <script type="module">
+      const {
+        generateLiturgicalCalendar,
+        getFirstSundayOfAdvent,
+        getLiturgicalYear,
+        groupCalendarEventsByDate,
+        getAshWednesday,
+        getDayOfPentecost,
+        getEasterSunday,
+        getGoodFriday,
+        getMaundyThursday,
+        getPalmSunday,
+        getSundayLectionaryLetter,
+        getWeekdayLectionaryNumber,
+        isSunday,
+      } = await import("../dist/anglicana_calendar.min.js");
+
+      const DOW_SHORT = ["", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+      /** Precedence for choosing which listed feast drives liturgical colour (mirrors library conflict tiers). */
+      const RANK_ORDER = {
+        principal_feast: 0,
+        principal_holy_day: 0,
+        festival: 1,
+        lesser_festival: 2,
+        commemoration: 3,
+        sunday: 4,
+        sunday_series: 4,
+        special_observance: 5,
+        special_observance_series: 5,
+        weekday: 6,
+      };
+
+      const LIT_COLOUR_LABEL = {
+        purple: "purple",
+        white: "white",
+        red: "red",
+        green: "green",
+        rose: "rose",
+        black: "black",
+      };
+
+      function firstSundayOnOrAfter(plain) {
+        let d = plain;
+        while (!isSunday(d)) d = d.add({ days: 1 });
+        return d;
+      }
+
+      function pickBestFeastForColour(events) {
+        const candidates = events.filter((e) => (RANK_ORDER[e.type] ?? 99) <= 2);
+        if (!candidates.length) return null;
+        candidates.sort((a, b) => {
+          const ra = RANK_ORDER[a.type] ?? 99;
+          const rb = RANK_ORDER[b.type] ?? 99;
+          if (ra !== rb) return ra - rb;
+          return a.name.localeCompare(b.name);
+        });
+        return candidates[0];
+      }
+
+      /** White / red (etc.) from the name of a principal feast, festival, or lesser festival. */
+      function colourFromFeastName(name) {
+        const n = name.toLowerCase();
+        if (n.includes("ash wednesday")) return "purple";
+        if (n.includes("good friday")) return "black";
+        if (n.includes("palm sunday")) return "red";
+        if (n.includes("pentecost")) return "red";
+        if (n.includes("holy innocents")) return "red";
+        if (n.includes("stephen")) return "red";
+        if (n.includes("martyr")) return "red";
+        return "white";
+      }
+
+      /**
+       * Approximate colour of the day for vestments / altar (demo heuristic: Holy Week + seasons + top feast).
+       * Not authoritative for every edge case in the Rules.
+       */
+      function approximateLiturgicalColour(plain, events, easterOptions) {
+        const eo = easterOptions ?? {};
+        const easter = getEasterSunday(plain, eo);
+        const palm = getPalmSunday(plain, eo);
+        const maundy = getMaundyThursday(plain, eo);
+        const gf = getGoodFriday(plain, eo);
+        const pentecost = getDayOfPentecost(plain, eo);
+        const ash = getAshWednesday(plain, eo);
+
+        if (plain.equals(gf)) return "black";
+        if (plain.equals(palm)) return "red";
+        if (Temporal.PlainDate.compare(plain, palm) > 0 && Temporal.PlainDate.compare(plain, maundy) < 0) {
+          return "red";
+        }
+        if (plain.equals(maundy)) return "white";
+        if (plain.equals(easter.subtract({ days: 1 }))) return "white";
+
+        const bestFeast = pickBestFeastForColour(events);
+        if (bestFeast) return colourFromFeastName(bestFeast.name);
+
+        const advStart = getFirstSundayOfAdvent(plain.year);
+        const advEnd = Temporal.PlainDate.from({ year: plain.year, month: 12, day: 24 });
+        if (
+          Temporal.PlainDate.compare(plain, advStart) >= 0 &&
+          Temporal.PlainDate.compare(plain, advEnd) <= 0
+        ) {
+          const gaudete = advStart.add({ weeks: 2 });
+          if (plain.equals(gaudete)) return "rose";
+          return "purple";
+        }
+
+        if ((plain.month === 12 && plain.day >= 25) || (plain.month === 1 && plain.day <= 5)) return "white";
+
+        if (Temporal.PlainDate.compare(plain, ash) >= 0 && Temporal.PlainDate.compare(plain, palm) < 0) {
+          const firstSunLent = firstSundayOnOrAfter(ash);
+          const laetare = firstSunLent.add({ weeks: 3 });
+          if (plain.equals(laetare)) return "rose";
+          return "purple";
+        }
+
+        if (
+          Temporal.PlainDate.compare(plain, easter) >= 0 &&
+          Temporal.PlainDate.compare(plain, pentecost) <= 0
+        ) {
+          return "white";
+        }
+
+        return "green";
+      }
+
+      /** Title-case words from snake_case event types for display (e.g. principal_feast → Principal Feast). */
+      function humanizeEventType(type) {
+        return String(type)
+          .split("_")
+          .map((w) => (w ? w.charAt(0).toUpperCase() + w.slice(1).toLowerCase() : w))
+          .join(" ");
+      }
+
+      function canonicalModeSummary(mode) {
+        const m = mode === "pastoral" ? "pastoral" : "canonical";
+        return m.charAt(0).toUpperCase() + m.slice(1);
+      }
+
+      const form = document.getElementById("demo-controls");
+      const yearInput = document.getElementById("church-year");
+      const rangeChipsEl = document.getElementById("range-chips");
+      const jumpTodayBtn = document.getElementById("jump-today");
+      const monthsEl = document.getElementById("months");
+      const errorEl = document.getElementById("demo-error");
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const FLAG_KEYS = [
+        "transferEpiphanyToSunday",
+        "transferPresentationToSunday",
+        "transferAllSaintsToSunday",
+        "transferBlessedVirginMaryToSeptember",
+        "transferFestivalsOnOrdinarySundays",
+        "transferLesserFestivalsWhenBlocked",
+        "transferLocalPrincipalToNearestSunday",
+        "includeCommemorationsAndLesserFestivals",
+        "includeAllSaintsSecondaryOnNovember1",
+        "bcpGeorgeMarkTransferHarmonisation",
+      ];
+
+      const PRESET = {
+        pastoral: {
+          transferEpiphanyToSunday: true,
+          transferPresentationToSunday: true,
+          transferAllSaintsToSunday: true,
+          transferBlessedVirginMaryToSeptember: true,
+          transferFestivalsOnOrdinarySundays: true,
+          transferLesserFestivalsWhenBlocked: true,
+          transferLocalPrincipalToNearestSunday: true,
+          includeCommemorationsAndLesserFestivals: true,
+          includeAllSaintsSecondaryOnNovember1: false,
+          bcpGeorgeMarkTransferHarmonisation: false,
+        },
+        canonical: {
+          transferEpiphanyToSunday: false,
+          transferPresentationToSunday: false,
+          transferAllSaintsToSunday: false,
+          transferBlessedVirginMaryToSeptember: false,
+          transferFestivalsOnOrdinarySundays: false,
+          transferLesserFestivalsWhenBlocked: false,
+          transferLocalPrincipalToNearestSunday: false,
+          includeCommemorationsAndLesserFestivals: true,
+          includeAllSaintsSecondaryOnNovember1: false,
+          bcpGeorgeMarkTransferHarmonisation: false,
+        },
+      };
+
+      function applyPreset(mode) {
+        const p = PRESET[mode] ?? PRESET.canonical;
+        for (const key of FLAG_KEYS) {
+          const el = form.querySelector(`input[name="${key}"]`);
+          if (el) el.checked = !!p[key];
+        }
+      }
+
+      function readMode() {
+        const checked = form.querySelector('input[name="canonicalMode"]:checked');
+        return checked?.value === "canonical" ? "canonical" : "pastoral";
+      }
+
+      function readEasterOptions() {
+        const v = document.getElementById("easter-style").value;
+        if (v === "julian") return { julian: true };
+        if (v === "orthodox") return { gregorian: true, julian: true };
+        return {};
+      }
+
+      function easterChipLabel() {
+        const v = document.getElementById("easter-style").value;
+        if (v === "julian") return "Easter: Julian";
+        if (v === "orthodox") return "Easter: Orthodox";
+        return "Easter: Western";
+      }
+
+      function readCalendarOptions() {
+        const opts = {
+          canonicalMode: readMode(),
+          easterOptions: readEasterOptions(),
+        };
+        for (const key of FLAG_KEYS) {
+          const el = form.querySelector(`input[name="${key}"]`);
+          opts[key] = el?.checked ?? false;
+        }
+        const raw = document.getElementById("local-events-json").value.trim();
+        if (raw) {
+          let parsed;
+          try {
+            parsed = JSON.parse(raw);
+          } catch (e) {
+            throw new Error(
+              `Local celebrations (JSON): ${e instanceof Error ? e.message : String(e)}`,
+            );
+          }
+          if (!Array.isArray(parsed)) {
+            throw new Error(
+              "Local celebrations must be a JSON array of objects (each needs at least name, type, and date).",
+            );
+          }
+          opts.localEvents = parsed;
+        }
+        return opts;
+      }
+
+      function render() {
+        errorEl.hidden = true;
+        errorEl.textContent = "";
+
+        const bailJump = () => {
+          jumpTodayBtn.disabled = true;
+          jumpTodayBtn.setAttribute("aria-disabled", "true");
+        };
+
+        const raw = Number(yearInput.value);
+        if (!Number.isInteger(raw) || raw < 1583 || raw > 9999) {
+          errorEl.hidden = false;
+          errorEl.textContent = "Church year must be an integer from 1583 to 9999.";
+          bailJump();
+          return;
+        }
+
+        const CHURCH_YEAR = raw;
+        let options;
+        try {
+          options = readCalendarOptions();
+        } catch (e) {
+          errorEl.hidden = false;
+          errorEl.textContent = e instanceof Error ? e.message : String(e);
+          bailJump();
+          return;
+        }
+
+        let adventStart;
+        let yearEnd;
+        try {
+          adventStart = getFirstSundayOfAdvent(CHURCH_YEAR - 1);
+          yearEnd = getFirstSundayOfAdvent(CHURCH_YEAR).subtract({ days: 1 });
+        } catch (e) {
+          errorEl.hidden = false;
+          errorEl.textContent = e instanceof Error ? e.message : String(e);
+          bailJump();
+          return;
+        }
+
+        function inChurchYear(d) {
+          return Temporal.PlainDate.compare(d, adventStart) >= 0 &&
+            Temporal.PlainDate.compare(d, yearEnd) <= 0;
+        }
+
+        const gridStart = Temporal.PlainDate.from({
+          year: adventStart.year,
+          month: adventStart.month,
+          day: 1,
+        });
+
+        const liturgicalYears = new Set();
+        for (let mi = 0; mi < 12; mi++) {
+          const monthFirst = gridStart.add({ months: mi });
+          const anchor = Temporal.PlainDate.from({ year: monthFirst.year, month: monthFirst.month, day: 1 });
+          const dim = anchor.daysInMonth;
+          for (let day = 1; day <= dim; day++) {
+            liturgicalYears.add(
+              getLiturgicalYear(Temporal.PlainDate.from({ year: monthFirst.year, month: monthFirst.month, day })),
+            );
+          }
+        }
+
+        const eventsByLiturgicalYear = new Map();
+        try {
+          for (const ly of liturgicalYears) {
+            eventsByLiturgicalYear.set(ly, groupCalendarEventsByDate(generateLiturgicalCalendar(ly, options)));
+          }
+        } catch (e) {
+          errorEl.hidden = false;
+          errorEl.textContent = e instanceof Error ? e.message : String(e);
+          bailJump();
+          return;
+        }
+
+        function eventsForDay(plain) {
+          const ly = getLiturgicalYear(plain);
+          return eventsByLiturgicalYear.get(ly)?.get(plain.toString()) ?? [];
+        }
+
+        const localChip = options.localEvents?.length
+          ? `<span class="range__chip">Local celebrations: ${options.localEvents.length}</span>`
+          : "";
+
+        const sundayLetter = getSundayLectionaryLetter(adventStart);
+        const weekdayLectionary = getWeekdayLectionaryNumber(adventStart);
+
+        rangeChipsEl.innerHTML = `
+        <span class="range__label">Church year ${CHURCH_YEAR}</span>
+        <span class="range__chip">${canonicalModeSummary(options.canonicalMode)}</span>
+        <span class="range__chip">${easterChipLabel()}</span>
+        <span class="range__chip" title="Sunday Lectionary (three-year cycle, Common Worship)">Sunday ${sundayLetter}</span>
+        <span class="range__chip" title="Weekday Lectionary (two-year cycle, Common Worship)">Weekdays ${weekdayLectionary}</span>
+        ${localChip}
+        <span class="range__chip">${adventStart.toString()}</span>
+        <span class="range__arrow" aria-hidden="true">→</span>
+        <span class="range__chip">${yearEnd.toString()}</span>
+      `;
+
+        monthsEl.replaceChildren();
+
+        const today = Temporal.Now.plainDateISO();
+
+        for (let i = 0; i < 12; i++) {
+          const monthFirst = gridStart.add({ months: i });
+          const y = monthFirst.year;
+          const m = monthFirst.month;
+          const label = monthFirst.toLocaleString("en-GB", { month: "long", year: "numeric" });
+
+          const anchor = Temporal.PlainDate.from({ year: y, month: m, day: 1 });
+          const dim = anchor.daysInMonth;
+
+          const section = document.createElement("section");
+          section.className = "month";
+          section.setAttribute("aria-label", `Month ${label}`);
+
+          const list = document.createElement("div");
+          list.className = "month__list";
+
+          const head = document.createElement("div");
+          head.className = "month__head";
+          const h2 = document.createElement("h2");
+          h2.className = "month__title";
+          h2.textContent = label;
+          head.appendChild(h2);
+          list.appendChild(head);
+
+          for (let day = 1; day <= dim; day++) {
+            const plain = Temporal.PlainDate.from({ year: y, month: m, day });
+            const outside = !inChurchYear(plain);
+            const events = eventsForDay(plain);
+            const isToday = plain.equals(today);
+
+            const row = document.createElement("article");
+            const dayClasses = [outside ? "day day--outside" : "day"];
+            if (isToday) dayClasses.push("day--today");
+            row.className = dayClasses.join(" ");
+            row.id = `day-${plain.toString()}`;
+            if (isToday) row.tabIndex = -1;
+            const litColour = approximateLiturgicalColour(plain, events, options.easterOptions);
+            row.dataset.litColor = litColour;
+            const litLabel = LIT_COLOUR_LABEL[litColour] ?? litColour;
+            row.title = `Approximate liturgical colour: ${litLabel}`;
+            row.setAttribute(
+              "aria-label",
+              `${plain.toString()}, ${DOW_SHORT[plain.dayOfWeek]}; approximate liturgical colour ${litLabel}`,
+            );
+
+            const meta = document.createElement("div");
+            meta.className = "day__meta";
+            const num = document.createElement("span");
+            num.className = "day__num";
+            num.textContent = String(day);
+            const dowEl = document.createElement("span");
+            dowEl.className = "day__dow";
+            dowEl.textContent = DOW_SHORT[plain.dayOfWeek];
+            meta.append(num, dowEl);
+
+            const eventsEl = document.createElement("div");
+            eventsEl.className = "day__events";
+
+            if (events.length === 0) {
+              const empty = document.createElement("p");
+              empty.className = "day__empty";
+              empty.textContent = "No observances";
+              eventsEl.appendChild(empty);
+            } else {
+              for (const e of events) {
+                const tag = document.createElement("div");
+                tag.className = "tag";
+                tag.dataset.type = e.type;
+                const typeSpan = document.createElement("span");
+                typeSpan.className = "tag__type";
+                typeSpan.textContent = humanizeEventType(e.type);
+                const nameSpan = document.createElement("span");
+                nameSpan.textContent = e.name;
+                tag.append(typeSpan, nameSpan);
+                eventsEl.appendChild(tag);
+              }
+            }
+
+            row.append(meta, eventsEl);
+            list.appendChild(row);
+          }
+
+          section.appendChild(list);
+          monthsEl.appendChild(section);
+        }
+
+        const todayEl = document.getElementById(`day-${today.toString()}`);
+        jumpTodayBtn.disabled = !todayEl;
+        jumpTodayBtn.setAttribute("aria-disabled", String(!todayEl));
+      }
+
+      jumpTodayBtn.addEventListener("click", () => {
+        const el = document.getElementById(`day-${Temporal.Now.plainDateISO().toString()}`);
+        if (!el) return;
+        el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
+        el.focus({ preventScroll: true });
+      });
+
+      let yearInputTimer = 0;
+      yearInput.addEventListener("input", () => {
+        window.clearTimeout(yearInputTimer);
+        yearInputTimer = window.setTimeout(() => render(), 300);
+      });
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        render();
+      });
+      form.addEventListener("change", (e) => {
+        if (e.target?.name === "canonicalMode") {
+          applyPreset(e.target.value);
+        }
+        render();
+      });
+      render();
+    </script>
+  </body>
+</html>

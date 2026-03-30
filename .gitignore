@@ -1,0 +1,34 @@
+# Cursor / local AI
+.cursor
+
+# OS
+.DS_Store
+**/.DS_Store
+Thumbs.db
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Logs and temp
+*.log
+npm-debug.log*
+*.tmp
+*.temp
+.cache/
+
+# Deno
+coverage/
+packages/**/coverage/
+
+# Generated output (see deno.json publish.exclude and `deno task doc`; regen with tasks)
+/docs/
+packages/**/dist/
+packages/**/docs/
+
+# Local scratch
+scratch/
+
+# Optional local tooling (keep lockfiles committed)
+node_modules/
