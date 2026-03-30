@@ -46,11 +46,21 @@ console.log(getFirstSundayOfAdvent(2025).toString()); // "2025-11-30"
 // (runs from Advent Sunday 2024 to the day before Advent Sunday 2025)
 const calendar = generateLiturgicalCalendar(2025);
 
-// Each event includes: id, name, type, date, eventType, and optional rules/description
 calendar.forEach((event) => {
   console.log(`${event.date}: ${event.name} (${event.type})`);
 });
 ```
+
+Each `CalendarEvent` has at least `id`, `name`, `type`, `date` (`Temporal.PlainDate`), and `eventType` (`"fixed"` |
+`"moveable"`). You may also see `rules`, `description`, `relativeTo` / `offsetDays` for moveable rows, `originalDate`
+and `observance` when something is transferred or duplicated (e.g. optional secondary All Saints on 1 November),
+`eucharisticProperAs` on the two Sundays affected by the 22nd/23rd-after-Trinity proper swap, and **`optional: true`**
+where the observance is rubrically optional (e.g. Corpus Christi, Easter Vigil). Filter or label on `optional` if your
+UI should distinguish required from permitted observances.
+
+The full calendar also emits **Nine Days of Prayer (after Ascension)**—nine `special_observance` entries from the day
+after Ascension through the eve of Pentecost—as named in the
+[Common Worship Rules to Order the Christian Year](https://www.churchofengland.org/prayer-and-worship/worship-texts-and-resources/common-worship/churchs-year/rules).
 
 ### Looking up many dates
 
@@ -147,7 +157,11 @@ const calendar = generateLiturgicalCalendar(2025, { canonicalMode: "canonical" }
 ### Pastoral Mode
 
 Common Worship parish defaults: optional Sunday transfers (Epiphany, Candlemas, All Saints), BVM to 8 September,
-festivals on ordinary Sundays, blocked lesser festivals, and local principal to nearest Sunday:
+`transferFestivalsOnOrdinarySundays` (festivals on generic “ordinary” Sundays are nudged off Sunday), blocked lesser
+festivals, and local principal to nearest Sunday. **First and Second Sundays of Christmas**—Sundays in the range 26
+December–5 January—are **not** treated as ordinary Sundays for that discretionary rule, so a festival such as **Holy
+Innocents** may remain on Sunday when it falls on one of those Sundays (see the same
+[Rules](https://www.churchofengland.org/prayer-and-worship/worship-texts-and-resources/common-worship/churchs-year/rules)).
 
 ```ts
 import { generateLiturgicalCalendar } from "@phughesmcr/anglicana/calendar";
@@ -245,11 +259,6 @@ console.log(getLiturgicalYear("2025-01-15")); // 2024 (still in church year 2025
 ## Build & Contribute
 
 Anglicana is built using [Deno](https://deno.com/) and written in [TypeScript](https://www.typescriptlang.org/).
-
-For a quick local smoke run, see [examples/manual-smoke.ts](examples/manual-smoke.ts)
-(`deno run -A packages/calendar/examples/manual-smoke.ts` from the repository root, or
-`deno run -A examples/manual-smoke.ts` from `packages/calendar`). For ad hoc experiments, use a local `scratch/`
-directory at the repo root (listed in `.gitignore` and not tracked in git).
 
 You can build the project with:
 
